@@ -1,5 +1,9 @@
 package com.jcxavier.android.opengl.game.object;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 import com.jcxavier.android.opengl.engine.shader.ShaderManager;
 import com.jcxavier.android.opengl.engine.shader.TextureShader;
 import com.jcxavier.android.opengl.engine.texture.Texture;
@@ -8,11 +12,8 @@ import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import static android.opengl.GLES20.*;
+import static com.jcxavier.android.opengl.engine.cache.GLState.*;
 import static com.jcxavier.android.opengl.util.Constants.FLOAT_SIZE;
 
 /**
@@ -159,15 +160,15 @@ public class Sprite extends GameObject {
 
     @Override
     public void draw() {
-        glUseProgram(mShader.getProgram());
+        cachedGlUseProgram(mShader.getProgram());
 
         // bind the texture, if available
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTexture != null ? mTexture.getName() : 0);
+        cachedGlActiveTexture(GL_TEXTURE0);
+        cachedGlBindTexture(mTexture != null ? mTexture.getName() : 0);
 
         // additive alpha blending
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glBlendEquation(GL_FUNC_ADD);
+        cachedGlBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        cachedGlBlendEquation(GL_FUNC_ADD);
 
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferHandle);
 
