@@ -4,7 +4,7 @@ import com.jcxavier.android.opengl.engine.EngineActivity;
 import com.jcxavier.android.opengl.engine.RendererOptions;
 import com.jcxavier.android.opengl.game.GameStage;
 import com.jcxavier.android.opengl.game.SimpleGameStage;
-import com.jcxavier.android.opengl.game.camera.OrtographicCamera;
+import com.jcxavier.android.opengl.game.camera.OrthographicCamera;
 import com.jcxavier.android.opengl.math.Vector3;
 
 public class TestActivity extends EngineActivity {
@@ -13,8 +13,8 @@ public class TestActivity extends EngineActivity {
 
     @Override
     protected void onGameSetup() {
-        // creates a basic test stage with a 2D, top-down default ortographic camera
-        mStage = new TestStage(new OrtographicCamera());
+        // creates a basic test stage with a 2D, top-down default orthographic camera
+        mStage = new TestStage(new OrthographicCamera());
     }
 
     @Override

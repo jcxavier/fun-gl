@@ -10,7 +10,7 @@ import com.jcxavier.android.opengl.math.Vector3;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public class OrtographicCamera implements Camera {
+public class OrthographicCamera implements Camera {
 
     private final Matrix4 mProjectionMatrix;
     private final Matrix4 mLookAtMatrix;
@@ -26,7 +26,7 @@ public class OrtographicCamera implements Camera {
     /**
      * Creates a simple, non-configurable ortographic camera.
      */
-    public OrtographicCamera() {
+    public OrthographicCamera() {
         mProjectionMatrix = new Matrix4();
         mLookAtMatrix = new Matrix4();
 
