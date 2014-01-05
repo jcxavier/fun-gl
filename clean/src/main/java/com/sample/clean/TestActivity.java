@@ -30,7 +30,7 @@ public class TestActivity extends EngineActivity {
     @Override
     protected void onConfigureOptions(final RendererOptions options) {
         // configures the renderer with basic options
-        options.setBackgroundColor(new Vector3(0.0f, 0.0f, 0.0f));
+        options.setBackgroundColor(new Vector3(0.6f, 0.6f, 0.6f));
     }
 
     @Override
