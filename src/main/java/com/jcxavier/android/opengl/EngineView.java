@@ -10,7 +10,13 @@ import android.opengl.GLSurfaceView;
  */
 public class EngineView extends GLSurfaceView {
 
+    private final EngineRenderer mRenderer;
+
     public EngineView(Context context) {
         super(context);
+        setEGLContextClientVersion(2);
+
+        mRenderer = new EngineRenderer();
+        setRenderer(mRenderer);
     }
 }

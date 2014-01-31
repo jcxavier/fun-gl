@@ -1,6 +1,7 @@
 package com.jcxavier.android.opengl;
 
 import android.app.Activity;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 /**
@@ -10,9 +11,25 @@ import android.os.Bundle;
  */
 public class EngineActivity extends Activity {
 
+    private GLSurfaceView view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new EngineView(this));
+
+        view = new EngineView(this);
+        setContentView(view);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        view.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        view.onResume();
     }
 }
