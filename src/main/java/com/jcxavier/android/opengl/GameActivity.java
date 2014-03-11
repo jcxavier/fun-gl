@@ -1,10 +1,10 @@
 package com.jcxavier.android.opengl;
 
 import android.content.res.AssetManager;
-import android.graphics.Point;
 import com.jcxavier.android.opengl.engine.EngineActivity;
 import com.jcxavier.android.opengl.engine.RendererOptions;
-import com.jcxavier.android.opengl.game.Game2D;
+import com.jcxavier.android.opengl.game.GameStage;
+import com.jcxavier.android.opengl.game.SimpleGameStage;
 import com.jcxavier.android.opengl.math.Vector3;
 
 /**
@@ -15,28 +15,8 @@ import com.jcxavier.android.opengl.math.Vector3;
 public class GameActivity extends EngineActivity {
 
     @Override
-    protected Game2D onGameStart() {
-        return new Game2D() {
-            @Override
-            public void onLoad() {
-
-            }
-
-            @Override
-            public void onLayout(final Point screenSize) {
-
-            }
-
-            @Override
-            public void onUpdate(final double dt) {
-
-            }
-
-            @Override
-            public void onDraw() {
-
-            }
-        };
+    protected GameStage onGameStart() {
+        return new SimpleGameStage();
     }
 
     @Override

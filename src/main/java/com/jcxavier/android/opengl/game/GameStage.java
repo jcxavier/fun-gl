@@ -7,7 +7,7 @@ import android.graphics.Point;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public interface Game2D {
+public interface GameStage {
 
     void onLoad();
 

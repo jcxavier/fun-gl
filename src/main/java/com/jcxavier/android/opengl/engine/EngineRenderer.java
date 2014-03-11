@@ -7,9 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 import android.view.MotionEvent;
-import com.jcxavier.android.opengl.game.Game2D;
+import com.jcxavier.android.opengl.game.GameStage;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector3;
 
@@ -35,7 +34,7 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
     boolean mBackfaceCullingEnabled;
 
     private long mLastUpdateTimeStamp;
-    private Game2D mGame;
+    private GameStage mGame;
 
     EngineRenderer(final EngineActivity activity) {
         mActivity = activity;
@@ -65,8 +64,6 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         glViewport(0, 0, width, height);
-        Matrix.orthoM(mProjection.m, 0, 0, width, height, 0, -1, 1);
-
         mGame.onLayout(new Point(width, height));
     }
 
@@ -146,7 +143,7 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
         mLastUpdateTimeStamp = System.nanoTime();
     }
 
-    public void setGame(final Game2D game) {
+    public void setGame(final GameStage game) {
         mGame = game;
     }
 

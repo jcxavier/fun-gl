@@ -31,4 +31,20 @@ public final class Vector2 implements IVector<Vector2> {
         y = v.y;
         return this;
     }
+
+    public Vector2 set(final float x, final float y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+
+    @Override
+    public Vector2 add(final Vector2 _v) {
+        return set(x + _v.x, y + _v.y);
+    }
+
+    @Override
+    public Vector2 sub(final Vector2 _v) {
+        return set(x - _v.x, y - _v.y);
+    }
 }

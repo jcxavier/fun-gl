@@ -3,7 +3,7 @@ package com.jcxavier.android.opengl.engine;
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import com.jcxavier.android.opengl.game.Game2D;
+import com.jcxavier.android.opengl.game.GameStage;
 
 /**
  * Created on 31/01/2014.
@@ -48,7 +48,7 @@ public abstract class EngineActivity extends Activity {
 
     void onGlContextLoad() {
         onLoadAssets(getAssets());
-        Game2D game = onGameStart();
+        GameStage game = onGameStart();
 
         if (game == null) {
             throw new IllegalStateException("onGameStart() must return a non-null game");
@@ -57,7 +57,7 @@ public abstract class EngineActivity extends Activity {
         mView.mRenderer.setGame(game);
     }
 
-    protected abstract Game2D onGameStart();
+    protected abstract GameStage onGameStart();
 
     protected abstract void onGameSetup();
 
