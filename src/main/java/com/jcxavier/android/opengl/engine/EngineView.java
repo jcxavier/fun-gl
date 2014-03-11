@@ -1,8 +1,10 @@
 package com.jcxavier.android.opengl.engine;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+import com.jcxavier.android.opengl.engine.gdx.GdxEglConfigChooser;
 
 /**
  * Created on 31/01/2014.
@@ -20,6 +22,20 @@ class EngineView extends GLSurfaceView {
         setEGLContextClientVersion(2);
 
         mRenderer = new EngineRenderer((EngineActivity) context);
+    }
+
+    void initializeConfigChooser() {
+        Bitmap.Config config = mRenderer.mBitmapConfig;
+        int r = BitmapConfigHelper.getRedBytes(config);
+        int g = BitmapConfigHelper.getGreenBytes(config);
+        int b = BitmapConfigHelper.getBlueBytes(config);
+        int a = BitmapConfigHelper.getAlphaBytes(config);
+
+        int depthBufferSize = mRenderer.mDepthBufferSize;
+        int stencilBufferSize = mRenderer.mStencilBufferSize;
+        int samples = mRenderer.mSamples;
+
+        setEGLConfigChooser(new GdxEglConfigChooser(r, g, b, a, depthBufferSize, stencilBufferSize, samples));
     }
 
     void loadRenderer() {

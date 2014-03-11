@@ -22,6 +22,7 @@ public abstract class EngineActivity extends Activity {
 
         mView = new EngineView(this);
         onConfigureOptions(mView.mRenderer);
+        mView.initializeConfigChooser();
         mView.loadRenderer();
 
         setContentView(mView);

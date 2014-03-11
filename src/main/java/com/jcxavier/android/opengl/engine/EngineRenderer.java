@@ -3,6 +3,7 @@ package com.jcxavier.android.opengl.engine;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -26,19 +27,36 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
     private final Matrix4 mProjection;
     private final Vector3 mBgColor;
 
-    private long lastUpdateTimeStamp;
+    Bitmap.Config mBitmapConfig;
+    int mDepthBufferSize;
+    int mStencilBufferSize;
+    int mSamples;
+    boolean mBlendingEnabled;
+    boolean mBackfaceCullingEnabled;
+
+    private long mLastUpdateTimeStamp;
     private Game2D mGame;
 
     EngineRenderer(final EngineActivity activity) {
         mActivity = activity;
 
         mProjection = new Matrix4();
-        mBgColor = new Vector3();
+
+        // default options
+        mBgColor = new Vector3(0, 0, 0); // black
+        mBitmapConfig = Bitmap.Config.ARGB_8888;
+        mDepthBufferSize = 16;
+        mStencilBufferSize = 8;
+        mSamples = 0;
+        mBlendingEnabled = true;
+        mBackfaceCullingEnabled = false;
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         mActivity.onGlContextLoad();
+
+        applyRendererOptions();
 
         resetTimestamp();
         mGame.onLoad();
@@ -56,23 +74,76 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
     public void onDrawFrame(GL10 gl) {
         // calculate deltaTime
         long now = System.nanoTime();
-        double dt = (now - lastUpdateTimeStamp) / 1.0e9;
-        lastUpdateTimeStamp = now;
+        double dt = (now - mLastUpdateTimeStamp) / 1.0e9;
+        mLastUpdateTimeStamp = now;
 
-        // move clear color elsewhere
-        glClearColor(mBgColor.x, mBgColor.y, mBgColor.z, 1.0f);
         glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
         mGame.onUpdate(dt);
         mGame.onDraw();
     }
 
+    @Override
     public void setBackgroundColor(final Vector3 backgroundColor) {
         mBgColor.set(backgroundColor);
     }
 
+    @Override
+    public void setStencilBufferSize(final int size) {
+        mStencilBufferSize = size;
+    }
+
+    @Override
+    public void setDepthBufferSize(final int size) {
+        mDepthBufferSize = size;
+    }
+
+    @Override
+    public void setSamples(final int numberOfSamples) {
+        mSamples = numberOfSamples;
+    }
+
+    @Override
+    public void setBitmapConfig(final Bitmap.Config bitmapConfig) {
+        mBitmapConfig = bitmapConfig;
+    }
+
+    @Override
+    public void setBlendingEnabled(final boolean enabled) {
+        mBlendingEnabled = enabled;
+    }
+
+    @Override
+    public void setBackfaceCullingEnabled(final boolean enabled) {
+        mBackfaceCullingEnabled = enabled;
+    }
+
+    private void applyRendererOptions() {
+        glClearColor(mBgColor.x, mBgColor.y, mBgColor.z, 1.0f);
+
+        if (mBlendingEnabled) {
+            glEnable(GL_BLEND);
+        } else {
+            glDisable(GL_BLEND);
+        }
+
+        if (mBackfaceCullingEnabled) {
+            glCullFace(GL_BACK);
+            glEnable(GL_CULL_FACE);
+        } else {
+            glDisable(GL_CULL_FACE);
+        }
+
+        if (mDepthBufferSize > 0) {
+            glDepthFunc(GL_LEQUAL);
+            glEnable(GL_DEPTH_TEST);
+        } else {
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
+
     private void resetTimestamp() {
-        lastUpdateTimeStamp = System.nanoTime();
+        mLastUpdateTimeStamp = System.nanoTime();
     }
 
     public void setGame(final Game2D game) {
