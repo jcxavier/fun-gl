@@ -10,7 +10,17 @@ import com.jcxavier.android.opengl.math.Matrix4;
  */
 public interface Camera {
 
+    /**
+     * Updates the screen size in the camera.
+     *
+     * @param screenSize the screen size
+     */
     void updateScreenSize(Point screenSize);
 
+    /**
+     * Retrieves the computed projection matrix for this camera.
+     *
+     * @return the projection matrix
+     */
     Matrix4 getProjectionMatrix();
 }

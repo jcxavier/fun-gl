@@ -1,6 +1,7 @@
 package com.jcxavier.android.opengl.game.object;
 
 import com.jcxavier.android.opengl.game.type.Positionable;
+import com.jcxavier.android.opengl.game.type.Transformable;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
@@ -10,18 +11,21 @@ import com.jcxavier.android.opengl.math.Vector3;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public abstract class GameObject implements Positionable {
+public abstract class GameObject implements Positionable, Transformable {
 
     protected final Vector3 mPosition;
     protected final Vector3 mScale;
     protected final Vector2 mSize;
     protected final Vector2 mAnchorPoint;
+    private final Vector3 mPivot;
 
     protected final Matrix4 mModel;
 
-    private final Vector3 mPivot;
     private boolean mDirty;
 
+    /**
+     * Creates a simple game object, able to position itself and handle basic transformations.
+     */
     public GameObject() {
         mPosition = new Vector3(0, 0, 0);
         mScale = new Vector3(1, 1, 1);
@@ -34,6 +38,11 @@ public abstract class GameObject implements Positionable {
         mDirty = true;
     }
 
+    /**
+     * Signals the game object to update its model transformation matrix. The transformations are only actually updated
+     * if the object was modified.
+     */
+    @Override
     public void updateTransformations() {
         if (mDirty) {
             mModel.setIdentity();
@@ -71,6 +80,11 @@ public abstract class GameObject implements Positionable {
         return mSize;
     }
 
+    /**
+     * Sets the anchor point of this game object, between 0;0 and 1;1, where 0;0 is top-left and 1;1 is bottom-right.
+     *
+     * @param anchorPoint the anchor point to set
+     */
     @Override
     public void setAnchorPoint(final Vector2 anchorPoint) {
         mAnchorPoint.set(anchorPoint);
@@ -83,7 +97,15 @@ public abstract class GameObject implements Positionable {
         return mAnchorPoint;
     }
 
+    /**
+     * Updates the state of the object with the given projection matrix.
+     *
+     * @param projectionMatrix the projection matrix
+     */
     public abstract void update(final Matrix4 projectionMatrix);
 
+    /**
+     * Draws the object.
+     */
     public abstract void draw();
 }

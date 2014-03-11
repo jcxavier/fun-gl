@@ -14,6 +14,9 @@ public class OrtographicCamera implements Camera {
     private final Matrix4 mProjectionMatrix;
     private final Point mScreenSize;
 
+    /**
+     * Creates a simple, non-configurable ortographic camera.
+     */
     public OrtographicCamera() {
         mProjectionMatrix = new Matrix4();
         mScreenSize = new Point();
