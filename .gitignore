@@ -28,5 +28,8 @@ proguard/
 *.iws
 .idea/
 
+# Atlassian stuff
+atlassian-ide-plugin.xml
+
 # Maven generated files
 target/
