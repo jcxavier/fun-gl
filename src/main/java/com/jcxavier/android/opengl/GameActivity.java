@@ -51,7 +51,7 @@ public class GameActivity extends EngineActivity {
 
     @Override
     protected void onConfigureOptions(final RendererOptions options) {
-        options.setBackgroundColor(new Vector3(1.0f, 0.0f, 0.0f));
+        options.setBackgroundColor(new Vector3(0.1f, 0.2f, 0.3f));
         options.setDepthBufferSize(0);
         options.setStencilBufferSize(0);
         options.setSamples(0);
