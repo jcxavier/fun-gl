@@ -16,6 +16,16 @@ public final class Matrix4 {
         Matrix.setIdentityM(m, 0);
     }
 
+    public void set(final Matrix4 matrix) {
+        System.arraycopy(matrix.m, 0, m, 0, 16);
+    }
+
+    public Matrix4 copy() {
+        Matrix4 copyMatrix = new Matrix4();
+        copyMatrix.set(this);
+        return copyMatrix;
+    }
+
     public void setIdentity() {
         Matrix.setIdentityM(m, 0);
     }

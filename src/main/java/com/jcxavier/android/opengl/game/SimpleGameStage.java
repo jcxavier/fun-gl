@@ -4,23 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Point;
-import android.opengl.Matrix;
+import com.jcxavier.android.opengl.game.camera.Camera;
 import com.jcxavier.android.opengl.game.object.GameObject;
 import com.jcxavier.android.opengl.math.Matrix4;
 
 /**
- * @author jxav
+ * Created on 11/03/2014.
+ *
+ * @author João Xavier <jcxavier@jcxavier.com>
  */
 public class SimpleGameStage implements GameStage {
 
     private final Point mBounds;
-    private final Matrix4 mProjection;
     private final List<GameObject> mGameObjects;
 
-    public SimpleGameStage() {
+    private Camera mCamera;
+
+    public SimpleGameStage(final Camera camera) {
         mBounds = new Point(1, 1);
-        mProjection = new Matrix4();
         mGameObjects = new ArrayList<>();
+
+        mCamera = camera;
     }
 
     @Override
@@ -30,15 +34,17 @@ public class SimpleGameStage implements GameStage {
 
     @Override
     public void onLayout(final Point screenSize) {
+        mCamera.updateScreenSize(screenSize);
         mBounds.set(screenSize.x, screenSize.y);
-        Matrix.orthoM(mProjection.m, 0, 0, screenSize.x, screenSize.y, 0, -1, 1);
     }
 
     @Override
     public void onUpdate(final double dt) {
+        Matrix4 projectionMatrix = mCamera.getProjectionMatrix();
+
         for (GameObject gameObject : mGameObjects) {
             gameObject.updateTransformations();
-            gameObject.update(mProjection);
+            gameObject.update(projectionMatrix);
         }
     }
 

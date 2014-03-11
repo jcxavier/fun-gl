@@ -5,6 +5,7 @@ import com.jcxavier.android.opengl.engine.EngineActivity;
 import com.jcxavier.android.opengl.engine.RendererOptions;
 import com.jcxavier.android.opengl.game.GameStage;
 import com.jcxavier.android.opengl.game.SimpleGameStage;
+import com.jcxavier.android.opengl.game.camera.OrtographicCamera;
 import com.jcxavier.android.opengl.math.Vector3;
 
 /**
@@ -16,7 +17,7 @@ public class GameActivity extends EngineActivity {
 
     @Override
     protected GameStage onGameStart() {
-        return new SimpleGameStage();
+        return new SimpleGameStage(new OrtographicCamera());
     }
 
     @Override

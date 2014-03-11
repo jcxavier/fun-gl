@@ -1,12 +1,14 @@
 package com.jcxavier.android.opengl.game.object;
 
-import com.jcxavier.android.opengl.game.Positionable;
+import com.jcxavier.android.opengl.game.type.Positionable;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
 
 /**
- * @author jxav
+ * Created on 11/03/2014.
+ *
+ * @author João Xavier <jcxavier@jcxavier.com>
  */
 public abstract class GameObject implements Positionable {
 

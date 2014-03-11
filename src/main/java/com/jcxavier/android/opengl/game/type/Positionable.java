@@ -1,10 +1,12 @@
-package com.jcxavier.android.opengl.game;
+package com.jcxavier.android.opengl.game.type;
 
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
 
 /**
- * @author jxav
+ * Created on 11/03/2014.
+ *
+ * @author João Xavier <jcxavier@jcxavier.com>
  */
 public interface Positionable {
 
