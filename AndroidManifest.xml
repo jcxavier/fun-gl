@@ -16,7 +16,7 @@
          android:allowBackup="false">
 
         <activity
-            android:name=".EngineActivity"
+            android:name=".GameActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:launchMode="singleTask"/>

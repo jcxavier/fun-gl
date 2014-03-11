@@ -3,7 +3,7 @@ package com.jcxavier.android.opengl.math;
 import android.opengl.Matrix;
 
 /**
- * Created on 31/01/2014.
+ * Created on 11/03/2014.
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
