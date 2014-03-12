@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+import com.jcxavier.android.opengl.engine.shader.ShaderCache;
 import com.jcxavier.android.opengl.game.GameStage;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector3;
@@ -21,7 +22,7 @@ import static android.opengl.GLES20.*;
  */
 class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
 
-    private final EngineActivity mActivity;
+    private EngineActivity mActivity;
 
     private final Matrix4 mProjection;
     private final Vector3 mBgColor;
@@ -51,12 +52,21 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
         mBackfaceCullingEnabled = false;
     }
 
+    public void clean() {
+        mGame.onUnload();
+        mActivity = null;
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        mActivity.onGlContextLoad();
+        // reset state
+        ShaderCache.purgeSharedShaderCache();
 
+        // setup initial GL options
+        mActivity.onGlContextLoad();
         applyRendererOptions();
 
+        // load game
         resetTimestamp();
         mGame.onLoad();
     }
@@ -148,7 +158,6 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
     }
 
     public boolean onTouchEvent(final MotionEvent event) {
-        // TODO touch stuff
-        return false;
+        return mGame.onTouchEvent(event);
     }
 }

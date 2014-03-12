@@ -1,7 +1,9 @@
 package com.jcxavier.android.opengl.sample;
 
+import android.view.MotionEvent;
 import com.jcxavier.android.opengl.game.SimpleGameStage;
 import com.jcxavier.android.opengl.game.camera.Camera;
+import com.jcxavier.android.opengl.game.manager.input.InputHandler;
 import com.jcxavier.android.opengl.game.object.DrawableObject;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
@@ -24,14 +26,23 @@ public class TestStage extends SimpleGameStage {
         super.onLoad();
 
         DrawableObject staticShape = new DrawableObject();
-        staticShape.setPosition(new Vector3(400, 400, 0));
-        staticShape.setSize(new Vector2(100, 100));
+        staticShape.setPosition(new Vector3(400f, 400f, 0f));
+        staticShape.setSize(new Vector2(100f, 100f));
+        staticShape.setAnchorPoint(new Vector2(0.0f, 0.0f));
         staticShape.setColor(new Vector3(0.5f, 0.5f, 1.0f));
         staticShape.setAlpha(0.7f);
+        staticShape.setInputHandler(new InputHandler() {
+            @Override
+            public boolean processTouch(final MotionEvent event) {
+                movingShape.setPosition(new Vector3(0f, 0f, 0f));
+                return true;
+            }
+        });
 
         movingShape = new DrawableObject();
-        movingShape.setPosition(new Vector3(0, 0, 0));
-        movingShape.setSize(new Vector2(50, 50));
+        movingShape.setPosition(new Vector3(0f, 0f, 0f));
+        movingShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
+        movingShape.setSize(new Vector2(50f, 50f));
         movingShape.setColor(new Vector3(0.8f, 0.9f, 1.0f));
 
         addGameObject(movingShape);

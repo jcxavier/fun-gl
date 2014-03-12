@@ -42,6 +42,7 @@ public abstract class EngineActivity extends Activity {
 
     @Override
     protected final void onDestroy() {
+        mView.mRenderer.clean();
         onGameFinished();
         super.onDestroy();
     }

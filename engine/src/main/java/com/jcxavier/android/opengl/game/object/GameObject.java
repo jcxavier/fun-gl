@@ -1,7 +1,14 @@
 package com.jcxavier.android.opengl.game.object;
 
+import java.lang.ref.WeakReference;
+
+import android.view.MotionEvent;
+import com.jcxavier.android.opengl.game.manager.GameManager;
+import com.jcxavier.android.opengl.game.manager.input.InputHandler;
 import com.jcxavier.android.opengl.game.type.Positionable;
-import com.jcxavier.android.opengl.game.type.Transformable;
+import com.jcxavier.android.opengl.game.type.Resizeable;
+import com.jcxavier.android.opengl.game.type.Touchable;
+import com.jcxavier.android.opengl.game.type.Updateable;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
@@ -11,7 +18,7 @@ import com.jcxavier.android.opengl.math.Vector3;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public abstract class GameObject implements Positionable, Transformable {
+public abstract class GameObject implements Positionable, Resizeable, Updateable, Touchable {
 
     protected final Vector3 mPosition;
     protected final Vector3 mScale;
@@ -23,6 +30,10 @@ public abstract class GameObject implements Positionable, Transformable {
     protected final Matrix4 mModelMatrix;
 
     private boolean mDirty;
+
+    private WeakReference<GameManager> mGameManager;
+    private InputHandler mInputHandler;
+    private boolean mTouchable;
 
     /**
      * Creates a simple game object, able to position itself and handle basic transformations.
@@ -37,15 +48,25 @@ public abstract class GameObject implements Positionable, Transformable {
         mSize = new Vector2();
         mModelMatrix = new Matrix4();
 
+        mGameManager = new WeakReference<>(null);
         mDirty = true;
+    }
+
+    /**
+     * Updates the state of the object with the given projection matrix.
+     *
+     * @param projectionMatrix the projection matrix
+     */
+    public final void update(final Matrix4 projectionMatrix) {
+        updateTransformations();
+        updatePostTransformations(projectionMatrix);
     }
 
     /**
      * Signals the game object to update its model transformation matrix. The transformations are only actually updated
      * if the object was modified.
      */
-    @Override
-    public void updateTransformations() {
+    private void updateTransformations() {
         if (mDirty) {
             mModelMatrix.setIdentity();
             mModelMatrix.translate(Vector3.add(mPosition, mPivot));
@@ -61,13 +82,13 @@ public abstract class GameObject implements Positionable, Transformable {
     }
 
     @Override
-    public void setPosition(final Vector3 position) {
+    public final void setPosition(final Vector3 position) {
         mPosition.set(position);
         mDirty = true;
     }
 
     @Override
-    public Vector3 getPosition() {
+    public final Vector3 getPosition() {
         return mPosition;
     }
 
@@ -78,7 +99,7 @@ public abstract class GameObject implements Positionable, Transformable {
     }
 
     @Override
-    public Vector2 getSize() {
+    public final Vector2 getSize() {
         return mSize;
     }
 
@@ -88,14 +109,14 @@ public abstract class GameObject implements Positionable, Transformable {
      * @param anchorPoint the anchor point to set
      */
     @Override
-    public void setAnchorPoint(final Vector2 anchorPoint) {
+    public final void setAnchorPoint(final Vector2 anchorPoint) {
         mAnchorPoint.set(anchorPoint);
         mPivot.set(-mSize.x * mAnchorPoint.x, -mSize.y * mAnchorPoint.y, 0);
         mDirty = true;
     }
 
     @Override
-    public Vector2 getAnchorPoint() {
+    public final Vector2 getAnchorPoint() {
         return mAnchorPoint;
     }
 
@@ -104,7 +125,7 @@ public abstract class GameObject implements Positionable, Transformable {
      *
      * @param alpha the alpha to set
      */
-    public void setAlpha(final float alpha) {
+    public final void setAlpha(final float alpha) {
         mAlpha = alpha;
     }
 
@@ -113,16 +134,74 @@ public abstract class GameObject implements Positionable, Transformable {
      *
      * @return the alpha value
      */
-    public float getAlpha() {
+    public final float getAlpha() {
         return mAlpha;
     }
 
-    /**
-     * Updates the state of the object with the given projection matrix.
-     *
-     * @param projectionMatrix the projection matrix
-     */
-    public abstract void update(final Matrix4 projectionMatrix);
+    @Override
+    public boolean canBeTouched() {
+        return mSize.x > 0 && mSize.y > 0 && mAlpha > 0;
+    }
+
+    @Override
+    public boolean isTouchedBy(final MotionEvent event) {
+        // simplified picking (2D picking)
+        float topLeftX = mPosition.x + mPivot.x;
+        float topLeftY = mPosition.y + mPivot.y;
+        float bottomRightX = mPosition.x + mPivot.x + mSize.x;
+        float bottomRightY = mPosition.y + mPivot.y + mSize.y;
+        float touchX = event.getX();
+        float touchY = event.getY();
+
+        return topLeftX <= touchX && touchX <= bottomRightX && topLeftY <= touchY && touchY <= bottomRightY;
+    }
+
+    @Override
+    public boolean onTouch(final MotionEvent event) {
+        return mTouchable && mInputHandler.processTouch(event);
+    }
+
+    public final void setGameManager(final GameManager gameManager) {
+        mGameManager = new WeakReference<>(gameManager);
+        handleInputManagerAddition(gameManager);
+    }
+
+    public final void setInputHandler(final InputHandler inputHandler) {
+        mInputHandler = inputHandler;
+        setTouchable(mInputHandler != null);
+    }
+
+    public void setTouchable(final boolean touchable) {
+        mTouchable = touchable;
+
+        // if there is no input handler, create an anonymous input handler that doesn't process touches
+        if (mInputHandler == null) {
+            mInputHandler = new InputHandler() {
+                @Override
+                public boolean processTouch(final MotionEvent event) {
+                    return false;
+                }
+            };
+        }
+
+        GameManager gameManager = mGameManager.get();
+        handleInputManagerAddition(gameManager);
+    }
+
+    private void handleInputManagerAddition(final GameManager gameManager) {
+        if (gameManager != null) {
+            if (mTouchable) {
+                gameManager.getInputManager().addManagedObject(this);
+            } else {
+                gameManager.getInputManager().removeManagedObject(this);
+            }
+        }
+    }
+
+    @Override
+    public abstract void clean();
+
+    protected abstract void updatePostTransformations(final Matrix4 projectionMatrix);
 
     /**
      * Draws the object.
