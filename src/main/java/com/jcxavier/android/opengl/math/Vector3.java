@@ -41,48 +41,48 @@ public final class Vector3 implements IVector<Vector3> {
     }
 
     @Override
-    public Vector3 add(final Vector3 _v) {
-        return set(x + _v.x, y + _v.y, z + _v.z);
+    public Vector3 add(final Vector3 v) {
+        return set(x + v.x, y + v.y, z + v.z);
     }
 
     @Override
-    public Vector3 sub(final Vector3 _v) {
-        return set(x - _v.x, y - _v.y, z - _v.z);
+    public Vector3 sub(final Vector3 v) {
+        return set(x - v.x, y - v.y, z - v.z);
     }
 
     /**
      * Constructs a new vector containing the sum of two given vectors.
      *
-     * @param _vectorLeft  the left-hand side vector
-     * @param _vectorRight the right-hand side vector
+     * @param vectorLeft  the left-hand side vector
+     * @param vectorRight the right-hand side vector
      * @return a new vector with the result of the sum
      */
-    public static Vector3 add(Vector3 _vectorLeft, Vector3 _vectorRight) {
-        Vector3 v = new Vector3(_vectorLeft);
-        v.add(_vectorRight);
+    public static Vector3 add(Vector3 vectorLeft, Vector3 vectorRight) {
+        Vector3 v = new Vector3(vectorLeft);
+        v.add(vectorRight);
         return v;
     }
 
     /**
      * Constructs a new vector containing the subtraction of two given vectors.
      *
-     * @param _vectorLeft  the left-hand side vector
-     * @param _vectorRight the right-hand side vector
+     * @param vectorLeft  the left-hand side vector
+     * @param vectorRight the right-hand side vector
      * @return a new vector with the result of the subtraction
      */
-    public static Vector3 subtract(Vector3 _vectorLeft, Vector3 _vectorRight) {
-        Vector3 v = new Vector3(_vectorLeft);
-        v.sub(_vectorRight);
+    public static Vector3 subtract(Vector3 vectorLeft, Vector3 vectorRight) {
+        Vector3 v = new Vector3(vectorLeft);
+        v.sub(vectorRight);
         return v;
     }
 
     /**
      * Constructs a new negated vector (i.e. with all its components negated).
      *
-     * @param _vector the original vector
+     * @param v the original vector
      * @return a new vector
      */
-    public static Vector3 negate(final Vector3 _vector) {
-        return new Vector3(-_vector.x, -_vector.y, -_vector.z);
+    public static Vector3 negate(final Vector3 v) {
+        return new Vector3(-v.x, -v.y, -v.z);
     }
 }

@@ -10,24 +10,24 @@ public interface IVector<T extends IVector<T>> {
     /**
      * Sets this vector from the given vector.
      *
-     * @param _v The vector
+     * @param v The vector
      * @return This vector for chaining
      */
-    T set(T _v);
+    T set(T v);
 
     /**
      * Adds the given vector to this vector.
      *
-     * @param _v The vector
+     * @param v The vector
      * @return This vector for chaining
      */
-    T add(T _v);
+    T add(T v);
 
     /**
      * Subtracts the given vector from this vector.
      *
-     * @param _v The vector
+     * @param v The vector
      * @return This vector for chaining
      */
-    T sub(T _v);
+    T sub(T v);
 }
