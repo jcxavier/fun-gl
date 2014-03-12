@@ -33,18 +33,25 @@ public class DrawableObject extends GameObject {
 
         mShader = (ColorShaderProgram) ShaderCache.getSharedShaderCache().getShaderProgram(ColorShaderProgram.class);
 
-        generateBuffers();
-        populateBuffers(true);
+        generateBuffer();
+        populateBuffer(true);
     }
 
-    protected void generateBuffers() {
-        int[] buffers = { 0 };
-        glGenBuffers(1, buffers, 0);
-        mVertexBufferHandle = buffers[0];
+    @Override
+    public void clean() {
+        int[] buffer = {mVertexBufferHandle};
+        glDeleteBuffers(1, buffer, 0);
+        mVertexBufferHandle = 0;
     }
 
-    protected void populateBuffers(final boolean fromScratch) {
-        if (fromScratch) {
+    protected void generateBuffer() {
+        int[] buffer = {0};
+        glGenBuffers(1, buffer, 0);
+        mVertexBufferHandle = buffer[0];
+    }
+
+    protected void populateBuffer(final boolean fromScratch) {
+        if (mVertexBufferHandle == 0 || fromScratch) {
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * 4 * 4);
             byteBuffer.order(ByteOrder.nativeOrder());
             byteBuffer.position(0);
@@ -93,7 +100,7 @@ public class DrawableObject extends GameObject {
     }
 
     @Override
-    public void update(Matrix4 projectionMatrix) {
+    protected void updatePostTransformations(Matrix4 projectionMatrix) {
         mMvpMatrix.set(projectionMatrix);
         mMvpMatrix.multiply(mModelMatrix);
 
@@ -117,15 +124,15 @@ public class DrawableObject extends GameObject {
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
 
+    @Override
+    public void setSize(final Vector2 size) {
+        super.setSize(size);
+        populateBuffer(false);
+    }
+
     public void setColor(final Vector3 color) {
         mColor.x = color.x;
         mColor.y = color.y;
         mColor.z = color.z;
-    }
-
-    @Override
-    public void setSize(final Vector2 size) {
-        super.setSize(size);
-        populateBuffers(false);
     }
 }

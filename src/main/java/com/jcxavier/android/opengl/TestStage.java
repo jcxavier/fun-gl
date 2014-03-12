@@ -1,7 +1,9 @@
 package com.jcxavier.android.opengl;
 
+import android.view.MotionEvent;
 import com.jcxavier.android.opengl.game.SimpleGameStage;
 import com.jcxavier.android.opengl.game.camera.Camera;
+import com.jcxavier.android.opengl.game.manager.input.InputHandler;
 import com.jcxavier.android.opengl.game.object.DrawableObject;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
@@ -28,6 +30,13 @@ public class TestStage extends SimpleGameStage {
         staticShape.setSize(new Vector2(100, 100));
         staticShape.setColor(new Vector3(0.5f, 0.5f, 1.0f));
         staticShape.setAlpha(0.7f);
+        staticShape.setInputHandler(new InputHandler() {
+            @Override
+            public boolean processTouch(final MotionEvent event) {
+                movingShape.setPosition(new Vector3(0, 0, 0));
+                return true;
+            }
+        });
 
         movingShape = new DrawableObject();
         movingShape.setPosition(new Vector3(0, 0, 0));
