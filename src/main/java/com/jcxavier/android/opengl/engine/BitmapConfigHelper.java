@@ -3,7 +3,9 @@ package com.jcxavier.android.opengl.engine;
 import android.graphics.Bitmap;
 
 /**
- * @author jxav
+ * Created on 11/03/2014.
+ *
+ * @author João Xavier <jcxavier@jcxavier.com>
  */
 final class BitmapConfigHelper {
 

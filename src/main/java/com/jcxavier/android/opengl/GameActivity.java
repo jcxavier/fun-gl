@@ -15,14 +15,16 @@ import com.jcxavier.android.opengl.math.Vector3;
  */
 public class GameActivity extends EngineActivity {
 
-    @Override
-    protected GameStage onGameStart() {
-        return new SimpleGameStage(new OrtographicCamera());
-    }
+    private SimpleGameStage stage;
 
     @Override
     protected void onGameSetup() {
+        stage = new TestStage(new OrtographicCamera());
+    }
 
+    @Override
+    protected GameStage onGameStart() {
+        return stage;
     }
 
     @Override

@@ -9,6 +9,8 @@ import android.opengl.Matrix;
  */
 public final class Matrix4 {
 
+    private static final float[] TMP_MATRIX = new float[16];
+
     public final float[] m;
 
     public Matrix4() {
@@ -36,5 +38,10 @@ public final class Matrix4 {
 
     public void scale(final Vector3 scale) {
         Matrix.scaleM(m, 0, scale.x, scale.y, scale.z);
+    }
+
+    public void multiply(Matrix4 matrix) {
+        Matrix.multiplyMM(TMP_MATRIX, 0, m, 0, matrix.m, 0);
+        System.arraycopy(TMP_MATRIX, 0, m, 0, 16);
     }
 }

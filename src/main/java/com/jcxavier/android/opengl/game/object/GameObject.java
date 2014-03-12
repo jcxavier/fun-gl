@@ -17,9 +17,10 @@ public abstract class GameObject implements Positionable, Transformable {
     protected final Vector3 mScale;
     protected final Vector2 mSize;
     protected final Vector2 mAnchorPoint;
-    private final Vector3 mPivot;
+    protected float mAlpha;
 
-    protected final Matrix4 mModel;
+    private final Vector3 mPivot;
+    protected final Matrix4 mModelMatrix;
 
     private boolean mDirty;
 
@@ -31,9 +32,10 @@ public abstract class GameObject implements Positionable, Transformable {
         mScale = new Vector3(1, 1, 1);
         mAnchorPoint = new Vector2(0, 0);
         mPivot = new Vector3(0, 0, 0);
+        mAlpha = 1;
 
         mSize = new Vector2();
-        mModel = new Matrix4();
+        mModelMatrix = new Matrix4();
 
         mDirty = true;
     }
@@ -45,14 +47,14 @@ public abstract class GameObject implements Positionable, Transformable {
     @Override
     public void updateTransformations() {
         if (mDirty) {
-            mModel.setIdentity();
-            mModel.translate(Vector3.add(mPosition, mPivot));
-            mModel.translate(Vector3.negate(mPivot));
+            mModelMatrix.setIdentity();
+            mModelMatrix.translate(Vector3.add(mPosition, mPivot));
+            mModelMatrix.translate(Vector3.negate(mPivot));
 
             // TODO rotation
 
-            mModel.scale(mScale);
-            mModel.translate(mPivot);
+            mModelMatrix.scale(mScale);
+            mModelMatrix.translate(mPivot);
 
             mDirty = false;
         }
@@ -95,6 +97,24 @@ public abstract class GameObject implements Positionable, Transformable {
     @Override
     public Vector2 getAnchorPoint() {
         return mAnchorPoint;
+    }
+
+    /**
+     * Sets the alpha value of this object.
+     *
+     * @param alpha the alpha to set
+     */
+    public void setAlpha(final float alpha) {
+        mAlpha = alpha;
+    }
+
+    /**
+     * Retrieves the alpha value of this object.
+     *
+     * @return the alpha value
+     */
+    public float getAlpha() {
+        return mAlpha;
     }
 
     /**
