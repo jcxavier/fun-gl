@@ -1,12 +1,12 @@
 package com.jcxavier.android.opengl.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.graphics.Point;
 import com.jcxavier.android.opengl.game.camera.Camera;
 import com.jcxavier.android.opengl.game.object.GameObject;
 import com.jcxavier.android.opengl.math.Matrix4;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created on 11/03/2014.
@@ -61,5 +61,9 @@ public class SimpleGameStage implements GameStage {
 
     protected void removeGameObject(final GameObject gameObject) {
         mGameObjects.remove(gameObject);
+    }
+
+    protected Point getScreenBounds() {
+        return mBounds;
     }
 }
