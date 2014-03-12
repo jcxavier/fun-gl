@@ -1,6 +1,7 @@
 package com.jcxavier.android.opengl.game.object;
 
 import com.jcxavier.android.opengl.game.type.Positionable;
+import com.jcxavier.android.opengl.game.type.Resizeable;
 import com.jcxavier.android.opengl.game.type.Transformable;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
@@ -11,7 +12,7 @@ import com.jcxavier.android.opengl.math.Vector3;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public abstract class GameObject implements Positionable, Transformable {
+public abstract class GameObject implements Positionable, Resizeable, Transformable {
 
     protected final Vector3 mPosition;
     protected final Vector3 mScale;
