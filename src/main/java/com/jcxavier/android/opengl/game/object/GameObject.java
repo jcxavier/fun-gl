@@ -144,9 +144,16 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
     }
 
     @Override
-    public boolean isTouchedBy(final MotionEvent _event) {
-        // TODO handle picking
-        return false;
+    public boolean isTouchedBy(final MotionEvent event) {
+        // simplified picking (2D picking)
+        float topLeftX = mPosition.x + mPivot.x;
+        float topLeftY = mPosition.y + mPivot.y;
+        float bottomRightX = mPosition.x + mPivot.x + mSize.x;
+        float bottomRightY = mPosition.y + mPivot.y + mSize.y;
+        float touchX = event.getX();
+        float touchY = event.getY();
+
+        return topLeftX <= touchX && touchX <= bottomRightX && topLeftY <= touchY && touchY <= bottomRightY;
     }
 
     @Override
@@ -191,6 +198,7 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
         }
     }
 
+    @Override
     public abstract void clean();
 
     protected abstract void updatePostTransformations(final Matrix4 projectionMatrix);

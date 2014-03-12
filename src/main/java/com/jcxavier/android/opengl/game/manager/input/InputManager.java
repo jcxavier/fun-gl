@@ -1,6 +1,7 @@
 package com.jcxavier.android.opengl.game.manager.input;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +44,7 @@ public final class InputManager {
 
             for (Touchable touchable : touchableObjects) {
                 if (touchable.canBeTouched() && touchable.isTouchedBy(event) && touchable.onTouch(event)) {
+                    // touch was handled, don't proceed further
                     break;
                 }
             }
@@ -74,5 +76,17 @@ public final class InputManager {
 
     public void removeManagedObject(final Touchable touchable) {
         outgoingTouchables.add(touchable);
+    }
+
+    public List<Touchable> getTouchedObjects(final MotionEvent event) {
+        List<Touchable> touchedObjects = new ArrayList<>();
+
+        for (Touchable touchable : touchableObjects) {
+            if (touchable.canBeTouched() && touchable.isTouchedBy(event) && touchable.onTouch(event)) {
+                touchedObjects.add(touchable);
+            }
+        }
+
+        return touchedObjects;
     }
 }
