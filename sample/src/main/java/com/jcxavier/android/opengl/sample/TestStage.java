@@ -25,34 +25,50 @@ public class TestStage extends SimpleGameStage {
     public void onLoad() {
         super.onLoad();
 
-        DrawableObject staticShape = new DrawableObject();
-        staticShape.setPosition(new Vector3(400f, 400f, 0f));
-        staticShape.setSize(new Vector2(100f, 100f));
-        staticShape.setAnchorPoint(new Vector2(0.0f, 0.0f));
-        staticShape.setColor(new Vector3(0.5f, 0.5f, 1.0f));
-        staticShape.setAlpha(0.7f);
-        staticShape.setInputHandler(new InputHandler() {
+        // create a static shape that resets the moving shape upon click
+        DrawableObject clickableShape = new DrawableObject();
+        clickableShape.setPosition(new Vector3(400, 400, 0));
+        clickableShape.setSize(new Vector2(100, 100));
+        clickableShape.setAnchorPoint(new Vector2(0.0f, 0.0f));
+        clickableShape.setColor(new Vector3(0.5f, 0.5f, 1.0f));
+        clickableShape.setAlpha(0.7f);
+        clickableShape.setInputHandler(new InputHandler() {
             @Override
             public boolean processTouch(final MotionEvent event) {
-                movingShape.setPosition(new Vector3(0f, 0f, 0f));
+                resetMovingShapePosition();
                 return true;
             }
         });
 
+        // create a moving shape with anchor point in the center of the object. should be aligned with the origin (0, 0)
         movingShape = new DrawableObject();
-        movingShape.setPosition(new Vector3(0f, 0f, 0f));
+        movingShape.setSize(new Vector2(50, 50));
         movingShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
-        movingShape.setSize(new Vector2(50f, 50f));
         movingShape.setColor(new Vector3(0.8f, 0.9f, 1.0f));
 
+        // add the objects to the stage, they will be automatically managed and updated
         addGameObject(movingShape);
-        addGameObject(staticShape);
+        addGameObject(clickableShape);
+
+        // set the initial position of the moving shape
+        resetMovingShapePosition();
+    }
+
+    private void resetMovingShapePosition() {
+        movingShape.setPosition(new Vector3(25f, 25f, 0f));
     }
 
     @Override
     public void onUpdate(double dt) {
         super.onUpdate(dt);
 
-        movingShape.setPosition(movingShape.getPosition().add(new Vector3((float) dt * 20f, (float) dt * 20f, 0)));
+        float moveOffset = (float) (dt * 20);
+
+        // update the current moving shape position with the previously computed moveOffset
+        Vector3 currentPosition = movingShape.getPosition();
+        currentPosition.add(new Vector3(moveOffset, moveOffset, 0));
+
+        // setting the position of the object will trigger the update of the transformations
+        movingShape.setPosition(currentPosition);
     }
 }

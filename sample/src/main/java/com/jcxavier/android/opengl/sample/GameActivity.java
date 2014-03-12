@@ -19,6 +19,7 @@ public class GameActivity extends EngineActivity {
 
     @Override
     protected void onGameSetup() {
+        // creates a basic test stage with a 2D, top-down default ortographic camera
         stage = new TestStage(new OrtographicCamera());
     }
 
@@ -34,6 +35,7 @@ public class GameActivity extends EngineActivity {
 
     @Override
     protected void onConfigureOptions(final RendererOptions options) {
+        // configures the renderer with basic options
         options.setBackgroundColor(new Vector3(0.1f, 0.2f, 0.3f));
         options.setDepthBufferSize(0);
         options.setStencilBufferSize(0);
