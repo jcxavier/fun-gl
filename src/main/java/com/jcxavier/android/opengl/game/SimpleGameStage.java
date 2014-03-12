@@ -34,12 +34,16 @@ public class SimpleGameStage implements GameStage, GameManager {
 
     @Override
     public void onLoad() {
-        // TODO onLoad
+        // no additional setup required here
     }
 
     @Override
     public void onUnload() {
-        // TODO onUnload
+        for (Updateable object : mUpdateableObjects) {
+            object.clean();
+        }
+
+        mUpdateableObjects.clear();
     }
 
     @Override
@@ -59,35 +63,35 @@ public class SimpleGameStage implements GameStage, GameManager {
     }
 
     @Override
-    public void onDraw() {
+    public final void onDraw() {
         for (Updateable object : mUpdateableObjects) {
             object.draw();
         }
     }
 
     @Override
-    public boolean onTouchEvent(final MotionEvent event) {
+    public final boolean onTouchEvent(final MotionEvent event) {
         mInputManager.queueEvent(event);
         // event was consumed by this stage
         return true;
     }
 
     @Override
-    public InputManager getInputManager() {
+    public final InputManager getInputManager() {
         return mInputManager;
     }
 
     @Override
-    public ScreenManager getScreenManager() {
+    public final ScreenManager getScreenManager() {
         return mScreenManager;
     }
 
-    protected void addGameObject(final GameObject gameObject) {
+    protected final void addGameObject(final GameObject gameObject) {
         gameObject.setGameManager(this);
         mUpdateableObjects.add(gameObject);
     }
 
-    protected void removeGameObject(final GameObject gameObject) {
+    protected final void removeGameObject(final GameObject gameObject) {
         mUpdateableObjects.remove(gameObject);
         gameObject.setGameManager(null);
         gameObject.clean();

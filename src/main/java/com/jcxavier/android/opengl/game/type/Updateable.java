@@ -9,6 +9,8 @@ import com.jcxavier.android.opengl.math.Matrix4;
  */
 public interface Updateable {
 
+    void clean();
+
     void update(Matrix4 projectionMatrix);
 
     void draw();
