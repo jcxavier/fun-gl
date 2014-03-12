@@ -20,6 +20,8 @@ class EngineView extends GLSurfaceView {
 
         // create an OpenGL ES 2.0 context
         setEGLContextClientVersion(2);
+        // handle pauses (orientation changes) nicely
+        setPreserveEGLContextOnPause(true);
 
         mRenderer = new EngineRenderer((EngineActivity) context);
     }

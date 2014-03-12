@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+import com.jcxavier.android.opengl.engine.shader.ShaderCache;
 import com.jcxavier.android.opengl.game.GameStage;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector3;
@@ -53,10 +54,14 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        mActivity.onGlContextLoad();
+        // reset state
+        ShaderCache.purgeSharedShaderCache();
 
+        // setup initial GL options
+        mActivity.onGlContextLoad();
         applyRendererOptions();
 
+        // load game
         resetTimestamp();
         mGame.onLoad();
     }
