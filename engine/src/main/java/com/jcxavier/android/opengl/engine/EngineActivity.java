@@ -2,6 +2,7 @@ package com.jcxavier.android.opengl.engine;
 
 import android.app.Activity;
 import android.os.Bundle;
+import com.jcxavier.android.opengl.engine.texture.TextureManager;
 import com.jcxavier.android.opengl.file.FileManager;
 import com.jcxavier.android.opengl.game.GameStage;
 
@@ -56,6 +57,9 @@ public abstract class EngineActivity extends Activity {
     }
 
     void onGlContextLoad() {
+        // read the maximum texture size from OpenGL
+        TextureManager.getInstance().readMaxTextureSize();
+
         onLoadAssets();
         GameStage game = onGameStart();
 

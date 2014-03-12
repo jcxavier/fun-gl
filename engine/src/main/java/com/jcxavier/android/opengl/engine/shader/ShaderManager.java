@@ -36,12 +36,12 @@ public final class ShaderManager {
     /**
      * Safely cleans from memory and purges the shader cache and all its programs.
      */
-    public static void clean() {
-        if (sShaderManager != null) {
-            sShaderManager.deleteAllShaders();
+    public void clean() {
+        for (Shader program : mShaders.values()) {
+            program.clean();
         }
 
-        sShaderManager = null;
+        mShaders.clear();
     }
 
     /**
@@ -69,13 +69,5 @@ public final class ShaderManager {
         }
 
         return shader;
-    }
-
-    private void deleteAllShaders() {
-        for (Shader program : mShaders.values()) {
-            program.clean();
-        }
-
-        mShaders.clear();
     }
 }

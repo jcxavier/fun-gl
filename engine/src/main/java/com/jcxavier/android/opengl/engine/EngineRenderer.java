@@ -6,6 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 import com.jcxavier.android.opengl.engine.shader.ShaderManager;
+import com.jcxavier.android.opengl.engine.texture.TextureManager;
 import com.jcxavier.android.opengl.game.GameStage;
 import com.jcxavier.android.opengl.math.Vector3;
 
@@ -55,7 +56,8 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // reset state
-        ShaderManager.clean();
+        TextureManager.getInstance().clean();
+        ShaderManager.getInstance().clean();
 
         // setup initial GL options
         mActivity.onGlContextLoad();
