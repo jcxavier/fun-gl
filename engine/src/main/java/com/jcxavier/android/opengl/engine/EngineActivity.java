@@ -1,8 +1,8 @@
 package com.jcxavier.android.opengl.engine;
 
 import android.app.Activity;
-import android.content.res.AssetManager;
 import android.os.Bundle;
+import com.jcxavier.android.opengl.file.FileManager;
 import com.jcxavier.android.opengl.game.GameStage;
 
 /**
@@ -18,8 +18,13 @@ public abstract class EngineActivity extends Activity {
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // file manager setup
+        FileManager.getInstance().setAssetManager(getAssets());
+
+        // game setup
         onGameSetup();
 
+        // view configuration
         mView = new EngineView(this);
         onConfigureOptions(mView.mRenderer);
         mView.initializeConfigChooser();
@@ -42,13 +47,16 @@ public abstract class EngineActivity extends Activity {
 
     @Override
     protected final void onDestroy() {
+        // clean up
         mView.mRenderer.clean();
         onGameFinished();
+        FileManager.getInstance().setAssetManager(null);
+
         super.onDestroy();
     }
 
     void onGlContextLoad() {
-        onLoadAssets(getAssets());
+        onLoadAssets();
         GameStage game = onGameStart();
 
         if (game == null) {
@@ -62,7 +70,7 @@ public abstract class EngineActivity extends Activity {
 
     protected abstract void onGameSetup();
 
-    protected abstract void onLoadAssets(final AssetManager assetManager);
+    protected abstract void onLoadAssets();
 
     protected abstract void onConfigureOptions(final RendererOptions options);
 

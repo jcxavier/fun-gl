@@ -9,9 +9,9 @@ import static android.opengl.GLES20.*;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public class ColorShaderProgram extends ShaderProgram {
+public class ColorShader extends Shader {
 
-    public ColorShaderProgram() {
+    public ColorShader() {
         mAttributesArray = new String[] { "a_Position" };
 
         mUniformMapping.put("u_MVPMatrix", null);

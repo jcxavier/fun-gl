@@ -1,6 +1,5 @@
 package com.jcxavier.android.opengl.sample;
 
-import android.content.res.AssetManager;
 import com.jcxavier.android.opengl.engine.EngineActivity;
 import com.jcxavier.android.opengl.engine.RendererOptions;
 import com.jcxavier.android.opengl.game.GameStage;
@@ -29,8 +28,8 @@ public class GameActivity extends EngineActivity {
     }
 
     @Override
-    protected void onLoadAssets(final AssetManager assetManager) {
-
+    protected void onLoadAssets() {
+        // assets can now be loaded if needed
     }
 
     @Override
