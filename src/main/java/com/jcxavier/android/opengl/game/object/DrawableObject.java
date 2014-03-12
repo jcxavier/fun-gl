@@ -106,6 +106,11 @@ public class DrawableObject extends GameObject {
     @Override
     public void draw() {
         glUseProgram(mShader.getProgram());
+
+        // additive alpha blending
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendEquation(GL_FUNC_ADD);
+
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferHandle);
 
         mShader.setAttributePointers();

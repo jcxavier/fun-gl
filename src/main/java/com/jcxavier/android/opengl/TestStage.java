@@ -27,6 +27,7 @@ public class TestStage extends SimpleGameStage {
         staticShape.setPosition(new Vector3(400, 400, 0));
         staticShape.setSize(new Vector2(100, 100));
         staticShape.setColor(new Vector3(0.5f, 0.5f, 1.0f));
+        staticShape.setAlpha(0.7f);
 
         movingShape = new DrawableObject();
         movingShape.setPosition(new Vector3(0, 0, 0));
