@@ -1,10 +1,11 @@
 package com.jcxavier.android.opengl.game.object;
 
-import com.jcxavier.android.opengl.engine.shader.ColorAlphaShaderProgram;
+import com.jcxavier.android.opengl.engine.shader.ColorShaderProgram;
 import com.jcxavier.android.opengl.engine.shader.ShaderCache;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
+import com.jcxavier.android.opengl.math.Vector4;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -20,21 +21,20 @@ import static android.opengl.GLES20.*;
 public class DrawableObject extends GameObject {
 
     private final Matrix4 mMvpMatrix;
-    private final ColorAlphaShaderProgram mShader;
+    private final ColorShaderProgram mShader;
     private int mVertexBufferHandle;
     private FloatBuffer mVertexBuffer;
 
-    private final Vector3 mColor;
+    private final Vector4 mColor;
 
     public DrawableObject() {
+        mColor = new Vector4();
         mMvpMatrix = new Matrix4();
-        mShader = (ColorAlphaShaderProgram)
-                ShaderCache.getSharedShaderCache().getShaderProgram(ColorAlphaShaderProgram.class);
+
+        mShader = (ColorShaderProgram) ShaderCache.getSharedShaderCache().getShaderProgram(ColorShaderProgram.class);
 
         generateBuffers();
         populateBuffers(true);
-
-        mColor = new Vector3(1, 1, 1);
     }
 
     protected void generateBuffers() {
@@ -45,7 +45,7 @@ public class DrawableObject extends GameObject {
 
     protected void populateBuffers(final boolean fromScratch) {
         if (fromScratch) {
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(8 * 4);
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * 4 * 4);
             byteBuffer.order(ByteOrder.nativeOrder());
             byteBuffer.position(0);
             mVertexBuffer = byteBuffer.asFloatBuffer();
@@ -58,9 +58,9 @@ public class DrawableObject extends GameObject {
         mVertexBuffer.position(0);
 
         if (fromScratch) {
-            glBufferData(GL_ARRAY_BUFFER, mVertexBuffer.capacity(), mVertexBuffer, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, mVertexBuffer.capacity() * 4, mVertexBuffer, GL_DYNAMIC_DRAW);
         } else {
-            glBufferSubData(GL_ARRAY_BUFFER, 0, mVertexBuffer.capacity(), mVertexBuffer);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, mVertexBuffer.capacity() * 4, mVertexBuffer);
         }
     }
 
@@ -74,27 +74,23 @@ public class DrawableObject extends GameObject {
         //
         // 1 ---- 2
 
+        final float halfWidth = mSize.x / 2;
+        final float halfHeight = mSize.y / 2;
+
         for (int i = 0; i < 4; i++) {
-            // position
             if (i == 0 || i == 1) {
-                mVertexBuffer.put(mPosition.x);
+                mVertexBuffer.put(-halfWidth);
             } else {
-                mVertexBuffer.put(mPosition.x + mSize.x);
+                mVertexBuffer.put(halfWidth);
             }
 
             if (i == 0 || i == 3) {
-                mVertexBuffer.put(mPosition.y);
+                mVertexBuffer.put(-halfHeight);
             } else {
-                mVertexBuffer.put(mPosition.y + mSize.y);
+                mVertexBuffer.put(halfHeight);
             }
 
-            mVertexBuffer.put(mPosition.z);
-            mVertexBuffer.put(1.0f);
-
-            // color
-            mVertexBuffer.put(mColor.x);
-            mVertexBuffer.put(mColor.y);
-            mVertexBuffer.put(mColor.z);
+            mVertexBuffer.put(0.0f);
             mVertexBuffer.put(1.0f);
         }
     }
@@ -103,29 +99,31 @@ public class DrawableObject extends GameObject {
     public void update(Matrix4 projectionMatrix) {
         mMvpMatrix.set(projectionMatrix);
         mMvpMatrix.multiply(mModelMatrix);
+
+        mColor.w = mAlpha;
     }
 
     @Override
     public void draw() {
         glUseProgram(mShader.getProgram());
-
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferHandle);
 
         mShader.setAttributePointers();
         mShader.setMVPMatrixUniform(mMvpMatrix.m);
-        mShader.setAlphaUniform(mAlpha);
+        mShader.setColorUniform(mColor);
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    }
+
+    public void setColor(final Vector3 color) {
+        mColor.x = color.x;
+        mColor.y = color.y;
+        mColor.z = color.z;
     }
 
     @Override
     public void setSize(final Vector2 size) {
         super.setSize(size);
-        populateBuffers(false);
-    }
-
-    public void setColor(final Vector3 color) {
-        mColor.set(color);
         populateBuffers(false);
     }
 }
