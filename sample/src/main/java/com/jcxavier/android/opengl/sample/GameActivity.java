@@ -1,4 +1,4 @@
-package com.jcxavier.android.opengl;
+package com.jcxavier.android.opengl.sample;
 
 import android.content.res.AssetManager;
 import com.jcxavier.android.opengl.engine.EngineActivity;

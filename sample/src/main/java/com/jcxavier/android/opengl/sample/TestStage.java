@@ -1,4 +1,4 @@
-package com.jcxavier.android.opengl;
+package com.jcxavier.android.opengl.sample;
 
 import com.jcxavier.android.opengl.game.SimpleGameStage;
 import com.jcxavier.android.opengl.game.camera.Camera;
