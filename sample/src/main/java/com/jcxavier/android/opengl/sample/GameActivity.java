@@ -2,6 +2,7 @@ package com.jcxavier.android.opengl.sample;
 
 import com.jcxavier.android.opengl.engine.EngineActivity;
 import com.jcxavier.android.opengl.engine.RendererOptions;
+import com.jcxavier.android.opengl.engine.texture.TextureManager;
 import com.jcxavier.android.opengl.game.GameStage;
 import com.jcxavier.android.opengl.game.SimpleGameStage;
 import com.jcxavier.android.opengl.game.camera.OrtographicCamera;
@@ -30,6 +31,7 @@ public class GameActivity extends EngineActivity {
     @Override
     protected void onLoadAssets() {
         // assets can now be loaded if needed
+        TextureManager.getInstance().preload("spaceship.png");
     }
 
     @Override
@@ -43,6 +45,6 @@ public class GameActivity extends EngineActivity {
 
     @Override
     protected void onGameFinished() {
-
+        // game was finished, application is about to exit
     }
 }

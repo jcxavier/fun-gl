@@ -65,4 +65,16 @@ public class Texture {
     public boolean hasPremultipliedAlpha() {
         return mPremultipliedAlpha;
     }
+
+    @Override
+    public String toString() {
+        return "Texture{" +
+                "name=" + mName +
+                ", width=" + mWidth +
+                ", height=" + mHeight +
+                ", premultipliedAlpha=" + mPremultipliedAlpha +
+                ", textureWrap=" + mTextureWrap +
+                ", textureFilteringMode=" + mTextureFilteringMode +
+                '}';
+    }
 }

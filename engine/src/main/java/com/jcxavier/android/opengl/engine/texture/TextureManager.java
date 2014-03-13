@@ -83,6 +83,8 @@ public final class TextureManager {
             if (texture != null) {
                 // cache the texture if it is valid
                 mTextures.put(imageName, texture);
+
+                Log.d(TAG, String.format("Loaded texture %s: %s", imageName, texture));
             }
         }
 
