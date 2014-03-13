@@ -10,38 +10,38 @@ import java.util.Map;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public final class ShaderCache {
+public final class ShaderManager {
 
-    private static ShaderCache sSharedShaderCache = null;
+    private static ShaderManager sShaderManager = null;
 
-    private final Map<Class<? extends ShaderProgram>, ShaderProgram> mShaders;
+    private final Map<Class<? extends Shader>, Shader> mShaders;
 
-    private ShaderCache() {
+    private ShaderManager() {
         mShaders = new HashMap<>();
     }
 
     /**
-     * Retrieves the shader cache singleton.
+     * Retrieves the shader manager singleton.
      *
-     * @return the shared shader cache singleton
+     * @return the shader manager singleton
      */
-    public static ShaderCache getSharedShaderCache() {
-        if (sSharedShaderCache == null) {
-            sSharedShaderCache = new ShaderCache();
+    public static ShaderManager getInstance() {
+        if (sShaderManager == null) {
+            sShaderManager = new ShaderManager();
         }
 
-        return sSharedShaderCache;
+        return sShaderManager;
     }
 
     /**
      * Safely cleans from memory and purges the shader cache and all its programs.
      */
-    public static void purgeSharedShaderCache() {
-        if (sSharedShaderCache != null) {
-            sSharedShaderCache.deleteAllShaderPrograms();
+    public void clean() {
+        for (Shader program : mShaders.values()) {
+            program.clean();
         }
 
-        sSharedShaderCache = null;
+        mShaders.clear();
     }
 
     /**
@@ -51,8 +51,8 @@ public final class ShaderCache {
      * @param shaderClass the shader program class type
      * @return the created shader program
      */
-    public ShaderProgram getShaderProgram(Class<? extends ShaderProgram> shaderClass) {
-        ShaderProgram shader = mShaders.get(shaderClass);
+    public Shader getShader(Class<? extends Shader> shaderClass) {
+        Shader shader = mShaders.get(shaderClass);
 
         if (shader == null) {
             shader = ReflectionUtils.makeObjectOfType(shaderClass, null);
@@ -69,13 +69,5 @@ public final class ShaderCache {
         }
 
         return shader;
-    }
-
-    private void deleteAllShaderPrograms() {
-        for (ShaderProgram program : mShaders.values()) {
-            program.tearDownGL();
-        }
-
-        mShaders.clear();
     }
 }
