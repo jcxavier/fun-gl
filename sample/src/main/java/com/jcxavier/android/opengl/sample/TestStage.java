@@ -66,7 +66,8 @@ public class TestStage extends SimpleGameStage {
 
         // update the current moving shape position with the previously computed moveOffset
         Vector3 currentPosition = movingShape.getPosition();
-        currentPosition.add(new Vector3(moveOffset, moveOffset, 0));
+        currentPosition.x += moveOffset;
+        currentPosition.y += moveOffset;
 
         // setting the position of the object will trigger the update of the transformations
         movingShape.setPosition(currentPosition);

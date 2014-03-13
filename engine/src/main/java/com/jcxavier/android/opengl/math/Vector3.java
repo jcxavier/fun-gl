@@ -50,6 +50,11 @@ public final class Vector3 implements IVector<Vector3> {
         return set(x - v.x, y - v.y, z - v.z);
     }
 
+    @Override
+    public Vector3 negate() {
+        return set(-x, -y, -z);
+    }
+
     /**
      * Constructs a new vector containing the sum of two given vectors.
      *

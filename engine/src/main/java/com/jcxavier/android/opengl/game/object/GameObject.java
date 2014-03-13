@@ -1,7 +1,5 @@
 package com.jcxavier.android.opengl.game.object;
 
-import java.lang.ref.WeakReference;
-
 import android.view.MotionEvent;
 import com.jcxavier.android.opengl.game.manager.GameManager;
 import com.jcxavier.android.opengl.game.manager.input.InputHandler;
@@ -13,12 +11,19 @@ import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created on 11/03/2014.
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
 public abstract class GameObject implements Positionable, Resizeable, Updateable, Touchable {
+
+    /**
+     * Auxiliary vector for calculations.
+     */
+    private static final Vector3 TMP_VEC3 = new Vector3();
 
     protected final Vector3 mPosition;
     protected final Vector3 mScale;
@@ -69,8 +74,9 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
     private void updateTransformations() {
         if (mDirty) {
             mModelMatrix.setIdentity();
-            mModelMatrix.translate(Vector3.add(mPosition, mPivot));
-            mModelMatrix.translate(Vector3.negate(mPivot));
+
+            mModelMatrix.translate(TMP_VEC3.set(mPosition).add(mPivot));
+            mModelMatrix.translate(TMP_VEC3.set(mPivot).negate());
 
             // TODO rotation
 

@@ -47,4 +47,9 @@ public final class Vector2 implements IVector<Vector2> {
     public Vector2 sub(final Vector2 v) {
         return set(x - v.x, y - v.y);
     }
+
+    @Override
+    public Vector2 negate() {
+        return set(-x, -y);
+    }
 }
