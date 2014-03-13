@@ -12,6 +12,9 @@ import static com.jcxavier.android.opengl.util.Constants.FLOAT_SIZE;
  */
 public class ColorShader extends Shader {
 
+    private int mUniformLocationMVPMatrix;
+    private int mUniformLocationColor;
+
     public ColorShader() {
         mAttributesArray = new String[] { "a_Position" };
 
@@ -29,12 +32,18 @@ public class ColorShader extends Shader {
         glVertexAttribPointer(0, 4, GL_FLOAT, false, stride, 0);
     }
 
+    @Override
+    protected void onUniformLocationsAvailable() {
+        mUniformLocationMVPMatrix = mUniformMapping.get("u_MVPMatrix");
+        mUniformLocationColor = mUniformMapping.get("u_Color");
+    }
+
     public void setMVPMatrixUniform(final float[] matrix) {
-        glUniformMatrix4fv(mUniformMapping.get("u_MVPMatrix"), 1, false, matrix, 0);
+        glUniformMatrix4fv(mUniformLocationMVPMatrix, 1, false, matrix, 0);
     }
 
     public void setColorUniform(final Vector4 color) {
-        glUniform4f(mUniformMapping.get("u_Color"), color.x, color.y, color.z, color.w);
+        glUniform4f(mUniformLocationColor, color.x, color.y, color.z, color.w);
     }
 
     @Override
