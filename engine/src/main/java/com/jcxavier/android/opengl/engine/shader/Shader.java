@@ -12,9 +12,9 @@ import static android.opengl.GLES20.*;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public abstract class ShaderProgram {
+public abstract class Shader {
 
-    private static final String TAG = ShaderProgram.class.getSimpleName();
+    private static final String TAG = Shader.class.getSimpleName();
 
     private final int mProgram;
 
@@ -31,7 +31,7 @@ public abstract class ShaderProgram {
     /**
      * Creates a shader program within the OpenGL context.
      */
-    protected ShaderProgram() {
+    protected Shader() {
         mProgram = glCreateProgram();
         mUniformMapping = new HashMap<>();
     }
@@ -39,7 +39,7 @@ public abstract class ShaderProgram {
     /**
      * Deletes the shader program.
      */
-    public void tearDownGL() {
+    public void clean() {
         if (mProgram > 0) {
             glDeleteProgram(mProgram);
         }
