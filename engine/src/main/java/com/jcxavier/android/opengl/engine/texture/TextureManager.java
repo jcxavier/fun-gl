@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.util.Log;
 import com.jcxavier.android.opengl.file.FileManager;
+import com.jcxavier.android.opengl.util.BitmapUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -93,7 +94,10 @@ public final class TextureManager {
 
     private Bitmap readBitmap(final String imageName) {
         try {
+            // load the input stream into a byte array
             InputStream is = FileManager.getInstance().readFile(imageName);
+            byte[] imageData = BitmapUtils.readInputStreamAsByteArray(is);
+            is.close();
 
             // try to load the bitmap in the original size
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -101,18 +105,18 @@ public final class TextureManager {
             options.inSampleSize = 1;
 
             // read out size
-            BitmapFactory.decodeStream(is, null, options);
+            BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
 
             while (options.outHeight > mMaxTextureSize || options.outWidth > mMaxTextureSize) {
                 // retry, with 1/2 of the size of the texture
                 options.inSampleSize *= 2;
-                BitmapFactory.decodeStream(is, null, options);
+                BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
             }
 
             // now decode the actual bitmap
             options.inJustDecodeBounds = false;
 
-            return BitmapFactory.decodeStream(is, null, options);
+            return BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
         } catch (IOException ioe) {
             Log.e(TAG, String.format("Texture %s couldn't be read! %s", imageName, ioe.getMessage()));
         }
