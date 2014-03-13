@@ -49,7 +49,14 @@ public abstract class EngineActivity extends Activity {
     @Override
     protected final void onDestroy() {
         // clean up
-        mView.mRenderer.clean();
+        mView.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                // run the renderer clean on the GL thread
+                mView.mRenderer.clean();
+            }
+        });
+
         onGameFinished();
         FileManager.getInstance().setAssetManager(null);
 
