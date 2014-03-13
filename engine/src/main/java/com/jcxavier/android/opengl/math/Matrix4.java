@@ -44,4 +44,8 @@ public final class Matrix4 {
         Matrix.multiplyMM(TMP_MATRIX, 0, m, 0, matrix.m, 0);
         System.arraycopy(TMP_MATRIX, 0, m, 0, 16);
     }
+
+    public  void rotate(final Vector3 rotation) {
+        //http://www.cprogramming.com/tutorial/3d/rotationMatrices.html
+    }
 }

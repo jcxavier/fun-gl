@@ -1,12 +1,14 @@
 package com.jcxavier.android.opengl.game.object;
 
 import java.lang.ref.WeakReference;
+import java.util.Vector;
 
 import android.view.MotionEvent;
 import com.jcxavier.android.opengl.game.manager.GameManager;
 import com.jcxavier.android.opengl.game.manager.input.InputHandler;
 import com.jcxavier.android.opengl.game.type.Positionable;
 import com.jcxavier.android.opengl.game.type.Resizeable;
+import com.jcxavier.android.opengl.game.type.Rotatable;
 import com.jcxavier.android.opengl.game.type.Touchable;
 import com.jcxavier.android.opengl.game.type.Updateable;
 import com.jcxavier.android.opengl.math.Matrix4;
@@ -18,9 +20,10 @@ import com.jcxavier.android.opengl.math.Vector3;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public abstract class GameObject implements Positionable, Resizeable, Updateable, Touchable {
+public abstract class GameObject implements Positionable, Resizeable, Rotatable, Updateable, Touchable {
 
     protected final Vector3 mPosition;
+    protected final Vector3 mRotation;
     protected final Vector3 mScale;
     protected final Vector2 mSize;
     protected final Vector2 mAnchorPoint;
@@ -40,6 +43,7 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
      */
     public GameObject() {
         mPosition = new Vector3(0, 0, 0);
+        mRotation = new Vector3(0, 0,0);
         mScale = new Vector3(1, 1, 1);
         mAnchorPoint = new Vector2(0, 0);
         mPivot = new Vector3(0, 0, 0);
@@ -119,6 +123,13 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
     public final Vector2 getAnchorPoint() {
         return mAnchorPoint;
     }
+
+    @Override
+    public void setRotation(final Vector3 rotation){
+        mRotation.set(rotation);
+    }
+
+    @Override public Vector3 getRotation() { return mRotation; }
 
     /**
      * Sets the alpha value of this object.
@@ -207,4 +218,5 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
      * Draws the object.
      */
     public abstract void draw();
+
 }
