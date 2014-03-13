@@ -1,15 +1,15 @@
 package com.jcxavier.android.opengl.game.object;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
-import com.jcxavier.android.opengl.engine.shader.ColorShaderProgram;
-import com.jcxavier.android.opengl.engine.shader.ShaderCache;
+import com.jcxavier.android.opengl.engine.shader.ColorShader;
+import com.jcxavier.android.opengl.engine.shader.ShaderManager;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
 import com.jcxavier.android.opengl.math.Vector4;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 import static android.opengl.GLES20.*;
 
@@ -21,7 +21,7 @@ import static android.opengl.GLES20.*;
 public class DrawableObject extends GameObject {
 
     private final Matrix4 mMvpMatrix;
-    private final ColorShaderProgram mShader;
+    private final ColorShader mShader;
     private int mVertexBufferHandle;
     private FloatBuffer mVertexBuffer;
 
@@ -31,7 +31,7 @@ public class DrawableObject extends GameObject {
         mColor = new Vector4();
         mMvpMatrix = new Matrix4();
 
-        mShader = (ColorShaderProgram) ShaderCache.getSharedShaderCache().getShaderProgram(ColorShaderProgram.class);
+        mShader = (ColorShader) ShaderManager.getInstance().getShader(ColorShader.class);
 
         generateBuffer();
         populateBuffer(true);
@@ -39,13 +39,13 @@ public class DrawableObject extends GameObject {
 
     @Override
     public void clean() {
-        int[] buffer = {mVertexBufferHandle};
+        int[] buffer = { mVertexBufferHandle };
         glDeleteBuffers(1, buffer, 0);
         mVertexBufferHandle = 0;
     }
 
     protected void generateBuffer() {
-        int[] buffer = {0};
+        int[] buffer = { 0 };
         glGenBuffers(1, buffer, 0);
         mVertexBufferHandle = buffer[0];
     }
