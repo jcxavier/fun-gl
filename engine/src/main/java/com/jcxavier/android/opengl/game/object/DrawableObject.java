@@ -12,6 +12,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import static android.opengl.GLES20.*;
+import static com.jcxavier.android.opengl.util.Constants.FLOAT_SIZE;
 
 /**
  * Created on 11/03/2014.
@@ -19,6 +20,9 @@ import static android.opengl.GLES20.*;
  * @author João Xavier <jcxavier@jcxavier.com>
  */
 public class DrawableObject extends GameObject {
+
+    // 4 bytes position * 4 vertices * FLOAT_SIZE
+    private static final int BUFFER_SIZE_BYTES = 4 * 4 * FLOAT_SIZE;
 
     private final Matrix4 mMvpMatrix;
     private final ColorShader mShader;
@@ -51,27 +55,37 @@ public class DrawableObject extends GameObject {
     }
 
     protected void populateBuffer(final boolean fromScratch) {
-        if (mVertexBufferHandle == 0 || fromScratch) {
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * 4 * 4);
+        boolean createNewBuffer = fromScratch;
+
+        // the buffer was deleted or wasn't generated for some reason
+        if (mVertexBufferHandle == 0) {
+            generateBuffer();
+            createNewBuffer = true;
+        }
+
+        if (createNewBuffer) {
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE_BYTES);
             byteBuffer.order(ByteOrder.nativeOrder());
             byteBuffer.position(0);
             mVertexBuffer = byteBuffer.asFloatBuffer();
         }
 
-        updateBufferInformation();
+        updateVertexBufferInformation();
 
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferHandle);
 
         mVertexBuffer.position(0);
 
-        if (fromScratch) {
-            glBufferData(GL_ARRAY_BUFFER, mVertexBuffer.capacity() * 4, mVertexBuffer, GL_DYNAMIC_DRAW);
+        // the capacity of the float buffer is its size with float stride, so we must multiply by the float size to get
+        // the actual byte size
+        if (createNewBuffer) {
+            glBufferData(GL_ARRAY_BUFFER, mVertexBuffer.capacity() * FLOAT_SIZE, mVertexBuffer, GL_DYNAMIC_DRAW);
         } else {
-            glBufferSubData(GL_ARRAY_BUFFER, 0, mVertexBuffer.capacity() * 4, mVertexBuffer);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, mVertexBuffer.capacity() * FLOAT_SIZE, mVertexBuffer);
         }
     }
 
-    private void updateBufferInformation() {
+    private void updateVertexBufferInformation() {
         mVertexBuffer.position(0);
 
         // 0 ---- 3
@@ -95,6 +109,8 @@ public class DrawableObject extends GameObject {
             }
 
             mVertexBuffer.put(0.0f);
+
+            // there's no need for a 4th parameter, but it would get expanded to a vec4 in the shader anyway
             mVertexBuffer.put(1.0f);
         }
     }

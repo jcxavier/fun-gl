@@ -3,6 +3,7 @@ package com.jcxavier.android.opengl.engine.shader;
 import com.jcxavier.android.opengl.math.Vector4;
 
 import static android.opengl.GLES20.*;
+import static com.jcxavier.android.opengl.util.Constants.FLOAT_SIZE;
 
 /**
  * Created on 11/03/2014.
@@ -22,7 +23,8 @@ public class ColorShader extends Shader {
     public void setAttributePointers() {
         glEnableVertexAttribArray(0);
 
-        final int stride = 4 * 4;
+        // 4 bytes position * FLOAT_SIZE
+        final int stride = 4 * FLOAT_SIZE;
 
         glVertexAttribPointer(0, 4, GL_FLOAT, false, stride, 0);
     }
@@ -46,7 +48,7 @@ public class ColorShader extends Shader {
                 "varying lowp      vec4  v_Color;\n" +
                 "\n" +
                 "void main() {\n" +
-                "    gl_Position = u_MVPMatrix * vec4(a_Position.xyz, 1.0);\n" +
+                "    gl_Position = u_MVPMatrix * a_Position;\n" +
                 "    v_Color = u_Color;\n" +
                 "}\n";
     }
