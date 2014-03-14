@@ -48,57 +48,30 @@ public final class Matrix4 {
     }
 
     /**
+     * Rotates the matrix around the x axis
      *
-     * @param rotation the rotation vector to apply
-     * @param rotMode the order the order that the rotations will be applied
+     * @param rotation the rotation to apply
      */
+    public void rotateX(float rotation) {
+        Matrix.rotateM(m, 0, rotation, 1, 0, 0);
+    }
 
-    public void rotate(final Vector3 rotation, RotationMode rotMode) {
+    /**
+     * Rotates the matrix around the y axis
+     *
+     * @param rotation the rotation to apply
+     */
+    public void rotateY(float rotation) {
+        Matrix.rotateM(m, 0, rotation, 0, 1, 0);
+    }
 
-        switch (rotMode) {
-            case XYZ: {
-                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
-                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
-                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
-                break;
-            }
-            case XZY: {
-                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
-                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
-                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
-                break;
-            }
-            case YXZ: {
-                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
-                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
-                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
-                break;
-            }
-            case YZX: {
-                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
-                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
-                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
-                break;
-            }
-            case ZXY: {
-                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
-                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
-                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
-                break;
-            }
-            case ZYX: {
-                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
-                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
-                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
-                break;
-            }
-            default:{
-                // unity default rotation
-                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
-                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
-                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
-            }
-        }
+    /**
+     * Rotates the matrix around the z axis
+     *
+     * @param rotation the rotation to apply
+     */
+    public void rotateZ(float rotation) {
+        Matrix.rotateM(m, 0, rotation, 0, 0, 1);
     }
 
 }

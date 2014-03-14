@@ -3,6 +3,7 @@ package com.jcxavier.android.opengl.game.object;
 import java.lang.ref.WeakReference;
 import java.util.Vector;
 
+import android.opengl.Matrix;
 import android.view.MotionEvent;
 
 import com.jcxavier.android.opengl.engine.type.RotationMode;
@@ -81,7 +82,7 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
             mModelMatrix.translate(Vector3.negate(mPivot));
 
             // TODO rotation
-            mModelMatrix.rotate(mRotation, mRotationMode);
+            this.setRotation(mRotation);
 
             mModelMatrix.scale(mScale);
             mModelMatrix.translate(mPivot);
@@ -131,7 +132,50 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
 
     @Override
     public void setRotation(final Vector3 rotation){
-        mRotation.set(rotation);
+        switch (mRotationMode) {
+            case XYZ: {
+                mModelMatrix.rotateX(rotation.x);
+                mModelMatrix.rotateX(rotation.y);
+                mModelMatrix.rotateX(rotation.z);
+                break;
+            }
+            case XZY: {
+                mModelMatrix.rotateX(rotation.x);
+                mModelMatrix.rotateX(rotation.z);
+                mModelMatrix.rotateX(rotation.y);
+                break;
+            }
+            case YXZ: {
+                mModelMatrix.rotateX(rotation.y);
+                mModelMatrix.rotateX(rotation.x);
+                mModelMatrix.rotateX(rotation.z);
+                break;
+            }
+            case YZX: {
+                mModelMatrix.rotateX(rotation.y);
+                mModelMatrix.rotateX(rotation.z);
+                mModelMatrix.rotateX(rotation.x);
+                break;
+            }
+            case ZXY: {
+                mModelMatrix.rotateX(rotation.z);
+                mModelMatrix.rotateX(rotation.x);
+                mModelMatrix.rotateX(rotation.y);
+                break;
+            }
+            case ZYX: {
+                mModelMatrix.rotateX(rotation.z);
+                mModelMatrix.rotateX(rotation.y);
+                mModelMatrix.rotateX(rotation.x);
+                break;
+            }
+            default:{
+                // unity default rotation
+                mModelMatrix.rotateX(rotation.z);
+                mModelMatrix.rotateX(rotation.x);
+                mModelMatrix.rotateX(rotation.y);
+            }
+        }
     }
 
     @Override
