@@ -98,6 +98,15 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
         return mPosition;
     }
 
+    public final void setScale(Vector3 scale) {
+        mScale.set(scale);
+        mDirty = true;
+    }
+
+    public final Vector3 getScale() {
+        return mScale;
+    }
+
     @Override
     public void setSize(final Vector2 size) {
         mSize.set(size);

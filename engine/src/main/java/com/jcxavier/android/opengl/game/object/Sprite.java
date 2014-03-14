@@ -176,8 +176,5 @@ public class Sprite extends GameObject {
         mShader.setTextureUniform(0);
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
     }
 }

@@ -48,6 +48,8 @@ public class TestStage extends SimpleGameStage {
 
         movingObject = new Sprite("spaceship.png");
         movingObject.setAnchorPoint(new Vector2(0.0f, 0.0f));
+        movingObject.setScale(new Vector3(1.0f, 1.5f, 1.0f));
+        movingObject.setAlpha(0.4f);
 
         // add the objects to the stage, they will be automatically managed and updated
         addGameObject(movingObject);

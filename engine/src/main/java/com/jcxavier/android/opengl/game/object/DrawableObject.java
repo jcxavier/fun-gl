@@ -136,8 +136,6 @@ public class DrawableObject extends GameObject {
         mShader.setColorUniform(mColor);
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-        glDisableVertexAttribArray(0);
     }
 
     @Override
