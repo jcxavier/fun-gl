@@ -129,29 +129,29 @@ public class TestStage extends SimpleGameStage {
         }
 
         Vector3 xAxisRotationShapeCurrentPosition = mXrotationObject.getPosition();
-        xAxisRotationShapeCurrentPosition.add(new Vector3(0, moveOffset, 0));
+        xAxisRotationShapeCurrentPosition.y += moveOffset;
         mXrotationObject.setPosition(xAxisRotationShapeCurrentPosition);
 
         Vector3 yAxisRotationShapeCurrentPosition = mYrotationObject.getPosition();
-        yAxisRotationShapeCurrentPosition.add(new Vector3(moveOffset, 0, 0));
+        yAxisRotationShapeCurrentPosition.x += moveOffset;
         mYrotationObject.setPosition(yAxisRotationShapeCurrentPosition);
 
         Vector3 zAxisRotationShapeCurrentPosition = mZrotationObject.getPosition();
-        zAxisRotationShapeCurrentPosition.add(new Vector3(-moveOffset, 0, 0));
+        zAxisRotationShapeCurrentPosition.x -= moveOffset;
         mZrotationObject.setPosition(zAxisRotationShapeCurrentPosition);
 
         float rotateOffset = (float) (dt * 30);
 
         Vector3 xAxisRotationShapeCurrentRotation = mXrotationObject.getRotation();
-        xAxisRotationShapeCurrentRotation.add(new Vector3(rotateOffset, 0, 0));
+        xAxisRotationShapeCurrentRotation.x += rotateOffset;
         mXrotationObject.setRotation(xAxisRotationShapeCurrentRotation);
 
         Vector3 yAxisRotationShapeCurrentRotation = mYrotationObject.getRotation();
-        yAxisRotationShapeCurrentRotation.add(new Vector3(0, rotateOffset, 0));
+        yAxisRotationShapeCurrentRotation.y += yAxisRotationShapeCurrentRotation;
         mYrotationObject.setRotation(yAxisRotationShapeCurrentRotation);
 
         Vector3 zAxisRotationShapeCurrentRotation = mZrotationObject.getRotation();
-        zAxisRotationShapeCurrentRotation.add(new Vector3(0, 0, rotateOffset));
+        zAxisRotationShapeCurrentRotation.z += rotateOffset;
         mZrotationObject.setRotation(zAxisRotationShapeCurrentRotation);
 
     }
