@@ -5,6 +5,8 @@ import com.jcxavier.android.opengl.game.SimpleGameStage;
 import com.jcxavier.android.opengl.game.camera.Camera;
 import com.jcxavier.android.opengl.game.manager.input.InputHandler;
 import com.jcxavier.android.opengl.game.object.DrawableObject;
+import com.jcxavier.android.opengl.game.object.GameObject;
+import com.jcxavier.android.opengl.game.object.Sprite;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
 
@@ -15,29 +17,41 @@ import com.jcxavier.android.opengl.math.Vector3;
  */
 public class TestStage extends SimpleGameStage {
 
-    private DrawableObject movingShape;
+    private long mFrame;
 
-    private DrawableObject xAxisRotationShape;
-    private DrawableObject yAxisRotationShape;
-    private DrawableObject zAxisRotationShape;
+    private DrawableObject mClickableShape;
+    private GameObject mMovingObject;
+
+    private int mAlphaSign;
+
+    private DrawableObject mXrotationObject;
+    private DrawableObject mYrotationObject;
+    private DrawableObject mZrotationObject;
 
 
     public TestStage(final Camera camera) {
         super(camera);
+
+        mFrame = 0;
+        mAlphaSign = 1;
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
 
-        // create a static shape that resets the moving shape upon click
-        DrawableObject clickableShape = new DrawableObject();
-        clickableShape.setPosition(new Vector3(400, 400, 0));
-        clickableShape.setSize(new Vector2(100, 100));
-        clickableShape.setAnchorPoint(new Vector2(0.0f, 0.0f));
-        clickableShape.setColor(new Vector3(0.5f, 0.5f, 1.0f));
-        clickableShape.setAlpha(0.7f);
-        clickableShape.setInputHandler(new InputHandler() {
+        // create a static shape that resets the moving object upon click
+        mClickableShape = new DrawableObject();
+
+        // top-left of the object should be at (400, 400)
+        mClickableShape.setPosition(new Vector3(450, 450, 0));
+        mClickableShape.setSize(new Vector2(100, 100));
+        mClickableShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
+
+        mClickableShape.setColor(new Vector3(0.5f, 0.5f, 1.0f));
+        mClickableShape.setAlpha(0.7f);
+
+        mClickableShape.setInputHandler(new InputHandler() {
             @Override
             public boolean processTouch(final MotionEvent event) {
                 resetMovingShapesPosition();
@@ -45,34 +59,33 @@ public class TestStage extends SimpleGameStage {
             }
         });
 
-        // create a moving shape with anchor point in the center of the object. should be aligned with the origin (0, 0)
-        movingShape = new DrawableObject();
-        movingShape.setSize(new Vector2(50, 50));
-        movingShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
-        movingShape.setColor(new Vector3(0.8f, 0.9f, 1.0f));
+        mMovingObject = new Sprite("spaceship.png");
+        mMovingObject.setAnchorPoint(new Vector2(0.0f, 0.0f));
+        mMovingObject.setScale(new Vector3(1.0f, 1.5f, 1.0f));
+        mMovingObject.setAlpha(0.5f);
 
-        xAxisRotationShape = new DrawableObject();
-        xAxisRotationShape.setSize(new Vector2(50, 50));
-        xAxisRotationShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
-        xAxisRotationShape.setColor(new Vector3(0.2f, 0.4f, 1.0f));
+        mXrotationObject = new DrawableObject();
+        mXrotationObject.setSize(new Vector2(50, 50));
+        mXrotationObject.setAnchorPoint(new Vector2(0.5f, 0.5f));
+        mXrotationObject.setColor(new Vector3(0.2f, 0.4f, 1.0f));
 
-        yAxisRotationShape = new DrawableObject();
-        yAxisRotationShape.setSize(new Vector2(50, 50));
-        yAxisRotationShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
-        yAxisRotationShape.setColor(new Vector3(0.4f, 1.0f, 0.8f));
+        mYrotationObject = new DrawableObject();
+        mYrotationObject.setSize(new Vector2(50, 50));
+        mYrotationObject.setAnchorPoint(new Vector2(0.5f, 0.5f));
+        mYrotationObject.setColor(new Vector3(0.4f, 1.0f, 0.8f));
 
-        zAxisRotationShape = new DrawableObject();
-        zAxisRotationShape.setPosition(new Vector3(400, 400, 0));
-        zAxisRotationShape.setSize(new Vector2(50, 50));
-        zAxisRotationShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
-        zAxisRotationShape.setColor(new Vector3(1.0f, 0.7f, 0.2f));
+        mZrotationObject = new DrawableObject();
+        mZrotationObject.setPosition(new Vector3(400, 400, 0));
+        mZrotationObject.setSize(new Vector2(50, 50));
+        mZrotationObject.setAnchorPoint(new Vector2(0.5f, 0.5f));
+        mZrotationObject.setColor(new Vector3(1.0f, 0.7f, 0.2f));
 
 
         // add the objects to the stage, they will be automatically managed and updated
         addGameObject(movingShape);
-        addGameObject(xAxisRotationShape);
-        addGameObject(yAxisRotationShape);
-        addGameObject(zAxisRotationShape);
+        addGameObject(mXrotationObject);
+        addGameObject(mYrotationObject);
+        addGameObject(mZrotationObject);
         addGameObject(clickableShape);
 
         // set the initial position of the moving shape
@@ -81,53 +94,65 @@ public class TestStage extends SimpleGameStage {
 
     private void resetMovingShapesPosition() {
         movingShape.setPosition(new Vector3(25f, 25f, 0f));
-        xAxisRotationShape.setPosition(new Vector3(25f, 25f, 0f));
-        yAxisRotationShape.setPosition(new Vector3(25f, 25f, 0f));
-        zAxisRotationShape.setPosition(new Vector3(400, 400, 0));
+        mXrotationObject.setPosition(new Vector3(25f, 25f, 0f));
+        mYrotationObject.setPosition(new Vector3(25f, 25f, 0f));
+        mZrotationObject.setPosition(new Vector3(400, 400, 0));
     }
 
     @Override
     public void onUpdate(double dt) {
         super.onUpdate(dt);
 
-        float moveOffset = (float) (dt * 20);
+        mFrame++;
+        float dtFloat = (float) dt;
+        float moveOffset = dtFloat * 20;
 
-        // update the current moving shape position with the previously computed moveOffset
-        Vector3 movingShapeCurrentPosition = movingShape.getPosition();
-        movingShapeCurrentPosition.add(new Vector3(moveOffset, moveOffset, 0));
+        Vector3 currentPosition = mMovingObject.getPosition();
+        currentPosition.x += moveOffset;
+        currentPosition.y += moveOffset;
+
         // setting the position of the object will trigger the update of the transformations
-        movingShape.setPosition(movingShapeCurrentPosition);
+        mMovingObject.setPosition(currentPosition);
 
-        Vector3 xAxisRotationShapeCurrentPosition = xAxisRotationShape.getPosition();
+        // shift alpha per frame (should loop in 2.5s)
+        float alpha = mMovingObject.getAlpha() + mAlphaSign * dtFloat * 0.4f;
+        mMovingObject.setAlpha(alpha);
+
+        // reverse the sign once it is fully visible or invisible
+        if (alpha > 1.0f || alpha < 0.0f) {
+            mAlphaSign *= -1;
+        }
+
+        // trigger the button visibility (it shouldn't trigger while hidden)
+        if (mFrame % 200 == 0) {
+            mClickableShape.setVisible(!mClickableShape.isVisible());
+        }
+
+        Vector3 xAxisRotationShapeCurrentPosition = mXrotationObject.getPosition();
         xAxisRotationShapeCurrentPosition.add(new Vector3(0, moveOffset, 0));
-        xAxisRotationShape.setPosition(xAxisRotationShapeCurrentPosition);
+        mXrotationObject.setPosition(xAxisRotationShapeCurrentPosition);
 
-        Vector3 yAxisRotationShapeCurrentPosition = yAxisRotationShape.getPosition();
+        Vector3 yAxisRotationShapeCurrentPosition = mYrotationObject.getPosition();
         yAxisRotationShapeCurrentPosition.add(new Vector3(moveOffset, 0, 0));
-        yAxisRotationShape.setPosition(yAxisRotationShapeCurrentPosition);
+        mYrotationObject.setPosition(yAxisRotationShapeCurrentPosition);
 
-        Vector3 zAxisRotationShapeCurrentPosition = zAxisRotationShape.getPosition();
+        Vector3 zAxisRotationShapeCurrentPosition = mZrotationObject.getPosition();
         zAxisRotationShapeCurrentPosition.add(new Vector3(-moveOffset, 0, 0));
-        zAxisRotationShape.setPosition(zAxisRotationShapeCurrentPosition);
+        mZrotationObject.setPosition(zAxisRotationShapeCurrentPosition);
 
         float rotateOffset = (float) (dt * 30);
 
-        // update the current moving shape rotation with the previously computed rotateOffset
-        Vector3 movingShapeCurrentRotation = movingShape.getRotation();
-        movingShapeCurrentRotation.add(new Vector3(rotateOffset, rotateOffset, rotateOffset));
-        movingShape.setRotation(movingShapeCurrentRotation);
-
-        Vector3 xAxisRotationShapeCurrentRotation = xAxisRotationShape.getRotation();
+        Vector3 xAxisRotationShapeCurrentRotation = mXrotationObject.getRotation();
         xAxisRotationShapeCurrentRotation.add(new Vector3(rotateOffset, 0, 0));
-        xAxisRotationShape.setRotation(xAxisRotationShapeCurrentRotation);
+        mXrotationObject.setRotation(xAxisRotationShapeCurrentRotation);
 
-        Vector3 yAxisRotationShapeCurrentRotation = yAxisRotationShape.getRotation();
+        Vector3 yAxisRotationShapeCurrentRotation = mYrotationObject.getRotation();
         yAxisRotationShapeCurrentRotation.add(new Vector3(0, rotateOffset, 0));
-        yAxisRotationShape.setRotation(yAxisRotationShapeCurrentRotation);
+        mYrotationObject.setRotation(yAxisRotationShapeCurrentRotation);
 
-        Vector3 zAxisRotationShapeCurrentRotation = zAxisRotationShape.getRotation();
+        Vector3 zAxisRotationShapeCurrentRotation = mZrotationObject.getRotation();
         zAxisRotationShapeCurrentRotation.add(new Vector3(0, 0, rotateOffset));
-        zAxisRotationShape.setRotation(zAxisRotationShapeCurrentRotation);
+        mZrotationObject.setRotation(zAxisRotationShapeCurrentRotation);
 
     }
 }

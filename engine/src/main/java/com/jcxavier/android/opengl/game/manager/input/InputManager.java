@@ -1,15 +1,13 @@
 package com.jcxavier.android.opengl.game.manager.input;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import android.view.MotionEvent;
 import com.jcxavier.android.opengl.game.type.Touchable;
 import com.jcxavier.android.opengl.util.WeakList;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 /**
  * Created on 12/03/2014.
@@ -21,15 +19,15 @@ public final class InputManager {
     private final Deque<MotionEvent> motionEventQueue;
     private final List<Touchable> touchableObjects;
 
-    private final Set<Touchable> incomingTouchables;
-    private final Set<Touchable> outgoingTouchables;
+    private final Deque<Touchable> incomingTouchables;
+    private final Deque<Touchable> outgoingTouchables;
 
     public InputManager() {
         motionEventQueue = new ArrayDeque<>();
         touchableObjects = new WeakList<>();
 
-        incomingTouchables = new HashSet<>();
-        outgoingTouchables = new HashSet<>();
+        incomingTouchables = new ArrayDeque<>();
+        outgoingTouchables = new ArrayDeque<>();
     }
 
     public void queueEvent(final MotionEvent event) {
@@ -42,7 +40,10 @@ public final class InputManager {
         while (!motionEventQueue.isEmpty()) {
             MotionEvent event = motionEventQueue.poll();
 
-            for (Touchable touchable : touchableObjects) {
+            // reverse iteration, as we want to get the first element in Z-order
+            for (int i = touchableObjects.size() - 1; i >= 0; i--) {
+                Touchable touchable = touchableObjects.get(i);
+
                 if (touchable.canBeTouched() && touchable.isTouchedBy(event) && touchable.onTouch(event)) {
                     // touch was handled, don't proceed further
                     break;
@@ -52,36 +53,40 @@ public final class InputManager {
     }
 
     private void handleIncomingOutgoingTouchables() {
-        incomingTouchables.removeAll(outgoingTouchables);
+        // add all pending touchables first
+        while (!incomingTouchables.isEmpty()) {
+            Touchable touchable = incomingTouchables.poll();
 
-        for (Touchable touchable : incomingTouchables) {
             if (!touchableObjects.contains(touchable)) {
                 touchableObjects.add(touchable);
             }
         }
 
-        for (Touchable touchable : outgoingTouchables) {
+        // remove all pending touchables afterwards. If an object is added and removed in the same frame, it will
+        // be removed
+        while (!outgoingTouchables.isEmpty()) {
+            Touchable touchable = outgoingTouchables.poll();
+
             if (!touchableObjects.contains(touchable)) {
                 touchableObjects.remove(touchable);
             }
         }
-
-        incomingTouchables.clear();
-        outgoingTouchables.clear();
     }
 
     public void addManagedObject(final Touchable touchable) {
-        incomingTouchables.add(touchable);
+        incomingTouchables.offer(touchable);
     }
 
     public void removeManagedObject(final Touchable touchable) {
-        outgoingTouchables.add(touchable);
+        outgoingTouchables.offer(touchable);
     }
 
     public List<Touchable> getTouchedObjects(final MotionEvent event) {
         List<Touchable> touchedObjects = new ArrayList<>();
 
-        for (Touchable touchable : touchableObjects) {
+        for (int i = touchableObjects.size() - 1; i >= 0; i--) {
+            Touchable touchable = touchableObjects.get(i);
+
             if (touchable.canBeTouched() && touchable.isTouchedBy(event) && touchable.onTouch(event)) {
                 touchedObjects.add(touchable);
             }

@@ -15,17 +15,17 @@ import com.jcxavier.android.opengl.math.Vector3;
  */
 public class GameActivity extends EngineActivity {
 
-    private SimpleGameStage stage;
+    private SimpleGameStage mStage;
 
     @Override
     protected void onGameSetup() {
         // creates a basic test stage with a 2D, top-down default ortographic camera
-        stage = new TestStage(new OrtographicCamera());
+        mStage = new TestStage(new OrtographicCamera());
     }
 
     @Override
     protected GameStage onGameStart() {
-        return stage;
+        return mStage;
     }
 
     @Override

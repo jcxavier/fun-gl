@@ -9,6 +9,13 @@ import com.jcxavier.android.opengl.math.Matrix4;
  */
 public interface Updateable {
 
+    /**
+     * Retrieves whether this object is visible (and thus updateable).
+     *
+     * @return true if the object is visible, false otherwise
+     */
+    boolean isVisible();
+
     void clean();
 
     void update(Matrix4 projectionMatrix);

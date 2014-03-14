@@ -25,6 +25,11 @@ import com.jcxavier.android.opengl.math.Vector3;
  */
 public abstract class GameObject implements Positionable, Resizeable, Rotatable, Updateable, Touchable {
 
+    /**
+     * Auxiliary vector for calculations.
+     */
+    private static final Vector3 TMP_VEC3 = new Vector3();
+
     protected final Vector3 mPosition;
     protected final Vector3 mRotation;
     protected RotationMode mRotationMode;
@@ -41,6 +46,8 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
     private WeakReference<GameManager> mGameManager;
     private InputHandler mInputHandler;
     private boolean mTouchable;
+
+    private boolean mVisible;
 
     /**
      * Creates a simple game object, able to position itself and handle basic transformations.
@@ -59,6 +66,8 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
 
         mGameManager = new WeakReference<>(null);
         mDirty = true;
+
+        mVisible = true;
     }
 
     /**
@@ -78,8 +87,9 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
     private void updateTransformations() {
         if (mDirty) {
             mModelMatrix.setIdentity();
-            mModelMatrix.translate(Vector3.add(mPosition, mPivot));
-            mModelMatrix.translate(Vector3.negate(mPivot));
+
+            mModelMatrix.translate(TMP_VEC3.set(mPosition).add(mPivot));
+            mModelMatrix.translate(TMP_VEC3.set(mPivot).negate());
 
             // TODO rotation
             this.setRotation(mRotation);
@@ -100,6 +110,15 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
     @Override
     public final Vector3 getPosition() {
         return mPosition;
+    }
+
+    public final void setScale(Vector3 scale) {
+        mScale.set(scale);
+        mDirty = true;
+    }
+
+    public final Vector3 getScale() {
+        return mScale;
     }
 
     @Override
@@ -205,9 +224,18 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
         return mAlpha;
     }
 
+    public final void setVisible(final boolean visible) {
+        mVisible = visible;
+    }
+
+    @Override
+    public final boolean isVisible() {
+        return mVisible;
+    }
+
     @Override
     public boolean canBeTouched() {
-        return mSize.x > 0 && mSize.y > 0 && mAlpha > 0;
+        return mVisible && mSize.x > 0 && mSize.y > 0 && mAlpha > 0;
     }
 
     @Override

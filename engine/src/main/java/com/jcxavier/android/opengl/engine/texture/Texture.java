@@ -24,7 +24,7 @@ public class Texture {
         mPremultipliedAlpha = premultipledAlpha;
 
         // default texture parameters
-        mTextureWrap = TextureWrap.REPEAT;
+        mTextureWrap = TextureWrap.CLAMP_TO_EDGE;
         mTextureFilteringMode = TextureFilteringMode.LINEAR;
     }
 

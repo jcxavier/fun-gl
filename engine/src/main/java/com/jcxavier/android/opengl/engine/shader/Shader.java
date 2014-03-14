@@ -104,6 +104,8 @@ public abstract class Shader {
             mUniformMapping.put(key, location);
         }
 
+        onUniformLocationsAvailable();
+
         // release vertex and fragment shaders
         if (vertShader[0] > 0) {
             glDetachShader(mProgram, vertShader[0]);
@@ -155,6 +157,10 @@ public abstract class Shader {
     public int getProgram() {
         return mProgram;
     }
+
+    public abstract int getAttributeBufferSize();
+
+    protected abstract void onUniformLocationsAvailable();
 
     /**
      * Sets up the pointers to the attribute locations.

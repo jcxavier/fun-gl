@@ -2,6 +2,7 @@ package com.jcxavier.android.opengl.game.manager;
 
 import android.graphics.Point;
 import com.jcxavier.android.opengl.game.camera.Camera;
+import com.jcxavier.android.opengl.game.camera.DefaultCamera;
 
 /**
  * Created on 12/03/2014.
@@ -15,7 +16,13 @@ public class ScreenManager {
 
     public ScreenManager(final Camera camera) {
         mSize = new Point(1, 1);
-        mCamera = camera;
+
+        if (camera != null) {
+            mCamera = camera;
+        } else {
+            // fallback camera
+            mCamera = new DefaultCamera();
+        }
     }
 
     public void onLayout(final Point screenSize) {

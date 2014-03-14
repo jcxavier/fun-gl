@@ -53,4 +53,9 @@ public final class Vector4 implements IVector<Vector4> {
     public Vector4 sub(final Vector4 v) {
         return set(x - v.x, y - v.y, z - v.z, w - v.w);
     }
+
+    @Override
+    public Vector4 negate() {
+        return set(-x, -y, -z, -w);
+    }
 }
