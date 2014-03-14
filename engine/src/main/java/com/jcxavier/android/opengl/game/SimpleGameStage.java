@@ -57,15 +57,15 @@ public class SimpleGameStage implements GameStage, GameManager {
 
         mInputManager.onUpdate();
 
-        for (Updateable object : mUpdateableObjects) {
-            object.update(projectionMatrix);
+        for (int i = 0, len = mUpdateableObjects.size(); i < len; i++) {
+            mUpdateableObjects.get(i).update(projectionMatrix);
         }
     }
 
     @Override
     public final void onDraw() {
-        for (Updateable object : mUpdateableObjects) {
-            object.draw();
+        for (int i = 0, len = mUpdateableObjects.size(); i < len; i++) {
+            mUpdateableObjects.get(i).draw();
         }
     }
 

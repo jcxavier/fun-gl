@@ -44,6 +44,11 @@ public final class TextureManager {
 
     public void clean() {
         Collection<Texture> textures = mTextures.values();
+
+        if (textures.isEmpty()) {
+            return;
+        }
+
         int[] buffer = new int[textures.size()];
         int idx = 0;
 

@@ -30,4 +30,11 @@ public interface IVector<T extends IVector<T>> {
      * @return This vector for chaining
      */
     T sub(T v);
+
+    /**
+     * Negates this vector.
+     *
+     * @return This vector for chaining
+     */
+    T negate();
 }
