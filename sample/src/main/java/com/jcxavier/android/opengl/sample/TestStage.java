@@ -5,6 +5,8 @@ import com.jcxavier.android.opengl.game.SimpleGameStage;
 import com.jcxavier.android.opengl.game.camera.Camera;
 import com.jcxavier.android.opengl.game.manager.input.InputHandler;
 import com.jcxavier.android.opengl.game.object.DrawableObject;
+import com.jcxavier.android.opengl.game.object.GameObject;
+import com.jcxavier.android.opengl.game.object.Sprite;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
 
@@ -15,7 +17,7 @@ import com.jcxavier.android.opengl.math.Vector3;
  */
 public class TestStage extends SimpleGameStage {
 
-    private DrawableObject movingShape;
+    private GameObject movingObject;
 
     public TestStage(final Camera camera) {
         super(camera);
@@ -25,13 +27,17 @@ public class TestStage extends SimpleGameStage {
     public void onLoad() {
         super.onLoad();
 
-        // create a static shape that resets the moving shape upon click
+        // create a static shape that resets the moving object upon click
         DrawableObject clickableShape = new DrawableObject();
-        clickableShape.setPosition(new Vector3(400, 400, 0));
+
+        // top-left of the object should be at (400, 400)
+        clickableShape.setPosition(new Vector3(450, 450, 0));
         clickableShape.setSize(new Vector2(100, 100));
-        clickableShape.setAnchorPoint(new Vector2(0.0f, 0.0f));
+        clickableShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
+
         clickableShape.setColor(new Vector3(0.5f, 0.5f, 1.0f));
         clickableShape.setAlpha(0.7f);
+
         clickableShape.setInputHandler(new InputHandler() {
             @Override
             public boolean processTouch(final MotionEvent event) {
@@ -40,14 +46,11 @@ public class TestStage extends SimpleGameStage {
             }
         });
 
-        // create a moving shape with anchor point in the center of the object. should be aligned with the origin (0, 0)
-        movingShape = new DrawableObject();
-        movingShape.setSize(new Vector2(50, 50));
-        movingShape.setAnchorPoint(new Vector2(0.5f, 0.5f));
-        movingShape.setColor(new Vector3(0.8f, 0.9f, 1.0f));
+        movingObject = new Sprite("spaceship.png");
+        movingObject.setAnchorPoint(new Vector2(0.0f, 0.0f));
 
         // add the objects to the stage, they will be automatically managed and updated
-        addGameObject(movingShape);
+        addGameObject(movingObject);
         addGameObject(clickableShape);
 
         // set the initial position of the moving shape
@@ -55,7 +58,7 @@ public class TestStage extends SimpleGameStage {
     }
 
     private void resetMovingShapePosition() {
-        movingShape.setPosition(new Vector3(25f, 25f, 0f));
+        movingObject.setPosition(new Vector3(0, 0, 0));
     }
 
     @Override
@@ -65,11 +68,11 @@ public class TestStage extends SimpleGameStage {
         float moveOffset = (float) (dt * 20);
 
         // update the current moving shape position with the previously computed moveOffset
-        Vector3 currentPosition = movingShape.getPosition();
+        Vector3 currentPosition = movingObject.getPosition();
         currentPosition.x += moveOffset;
         currentPosition.y += moveOffset;
 
         // setting the position of the object will trigger the update of the transformations
-        movingShape.setPosition(currentPosition);
+        movingObject.setPosition(currentPosition);
     }
 }

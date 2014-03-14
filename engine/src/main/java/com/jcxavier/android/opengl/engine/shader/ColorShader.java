@@ -12,6 +12,9 @@ import static com.jcxavier.android.opengl.util.Constants.FLOAT_SIZE;
  */
 public class ColorShader extends Shader {
 
+    // 4 bytes position * FLOAT_SIZE
+    private static final int STRIDE = 4 * FLOAT_SIZE;
+
     private int mUniformLocationMVPMatrix;
     private int mUniformLocationColor;
 
@@ -23,13 +26,15 @@ public class ColorShader extends Shader {
     }
 
     @Override
+    public int getAttributeBufferSize() {
+        return STRIDE;
+    }
+
+    @Override
     public void setAttributePointers() {
         glEnableVertexAttribArray(0);
 
-        // 4 bytes position * FLOAT_SIZE
-        final int stride = 4 * FLOAT_SIZE;
-
-        glVertexAttribPointer(0, 4, GL_FLOAT, false, stride, 0);
+        glVertexAttribPointer(0, 4, GL_FLOAT, false, STRIDE, 0);
     }
 
     @Override

@@ -158,6 +158,8 @@ public abstract class Shader {
         return mProgram;
     }
 
+    public abstract int getAttributeBufferSize();
+
     protected abstract void onUniformLocationsAvailable();
 
     /**
