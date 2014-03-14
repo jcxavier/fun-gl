@@ -1,5 +1,7 @@
 package com.jcxavier.android.opengl.game.object;
 
+import java.lang.ref.WeakReference;
+
 import android.view.MotionEvent;
 import com.jcxavier.android.opengl.game.manager.GameManager;
 import com.jcxavier.android.opengl.game.manager.input.InputHandler;
@@ -10,8 +12,6 @@ import com.jcxavier.android.opengl.game.type.Updateable;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Created on 11/03/2014.
@@ -40,6 +40,8 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
     private InputHandler mInputHandler;
     private boolean mTouchable;
 
+    private boolean mVisible;
+
     /**
      * Creates a simple game object, able to position itself and handle basic transformations.
      */
@@ -55,6 +57,8 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
 
         mGameManager = new WeakReference<>(null);
         mDirty = true;
+
+        mVisible = true;
     }
 
     /**
@@ -153,9 +157,18 @@ public abstract class GameObject implements Positionable, Resizeable, Updateable
         return mAlpha;
     }
 
+    public final void setVisible(final boolean visible) {
+        mVisible = visible;
+    }
+
+    @Override
+    public final boolean isVisible() {
+        return mVisible;
+    }
+
     @Override
     public boolean canBeTouched() {
-        return mSize.x > 0 && mSize.y > 0 && mAlpha > 0;
+        return mVisible && mSize.x > 0 && mSize.y > 0 && mAlpha > 0;
     }
 
     @Override

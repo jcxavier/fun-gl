@@ -1,5 +1,8 @@
 package com.jcxavier.android.opengl.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.graphics.Point;
 import android.view.MotionEvent;
 import com.jcxavier.android.opengl.game.camera.Camera;
@@ -9,9 +12,6 @@ import com.jcxavier.android.opengl.game.manager.input.InputManager;
 import com.jcxavier.android.opengl.game.object.GameObject;
 import com.jcxavier.android.opengl.game.type.Updateable;
 import com.jcxavier.android.opengl.math.Matrix4;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created on 11/03/2014.
@@ -65,7 +65,11 @@ public class SimpleGameStage implements GameStage, GameManager {
     @Override
     public final void onDraw() {
         for (int i = 0, len = mUpdateableObjects.size(); i < len; i++) {
-            mUpdateableObjects.get(i).draw();
+            Updateable object = mUpdateableObjects.get(i);
+
+            if (object.isVisible()) {
+                object.draw();
+            }
         }
     }
 
