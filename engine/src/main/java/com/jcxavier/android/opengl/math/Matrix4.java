@@ -2,6 +2,8 @@ package com.jcxavier.android.opengl.math;
 
 import android.opengl.Matrix;
 
+import com.jcxavier.android.opengl.engine.type.RotationMode;
+
 /**
  * Created on 11/03/2014.
  *
@@ -45,7 +47,58 @@ public final class Matrix4 {
         System.arraycopy(TMP_MATRIX, 0, m, 0, 16);
     }
 
-    public  void rotate(final Vector3 rotation) {
-        //http://www.cprogramming.com/tutorial/3d/rotationMatrices.html
+    /**
+     *
+     * @param rotation the rotation vector to apply
+     * @param rotMode the order the order that the rotations will be applied
+     */
+
+    public void rotate(final Vector3 rotation, RotationMode rotMode) {
+
+        switch (rotMode) {
+            case XYZ: {
+                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
+                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
+                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
+                break;
+            }
+            case XZY: {
+                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
+                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
+                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
+                break;
+            }
+            case YXZ: {
+                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
+                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
+                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
+                break;
+            }
+            case YZX: {
+                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
+                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
+                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
+                break;
+            }
+            case ZXY: {
+                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
+                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
+                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
+                break;
+            }
+            case ZYX: {
+                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
+                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
+                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
+                break;
+            }
+            default:{
+                // unity default rotation
+                Matrix.rotateM(m, 0, rotation.z, 0, 0, 1);
+                Matrix.rotateM(m, 0, rotation.x, 1, 0, 0);
+                Matrix.rotateM(m, 0, rotation.y, 0, 1, 0);
+            }
+        }
     }
+
 }

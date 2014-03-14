@@ -1,6 +1,7 @@
 package com.jcxavier.android.opengl.game.type;
 
 import com.jcxavier.android.opengl.math.Vector3;
+import com.jcxavier.android.opengl.engine.type.RotationMode;
 
 import java.util.Vector;
 
@@ -22,4 +23,16 @@ public interface Rotatable {
      */
     Vector3 getRotation();
 
+    /**
+     * Sets the rotation mode of the object.
+     *
+     * @param rotMode the order that the rotations will be applied
+     */
+    void setRotationMode(final RotationMode rotMode);
+
+    /**
+     *
+     * @return returns the rotation mode of the object.
+     */
+    RotationMode getRotationMode();
 }

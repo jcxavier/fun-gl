@@ -4,6 +4,8 @@ import java.lang.ref.WeakReference;
 import java.util.Vector;
 
 import android.view.MotionEvent;
+
+import com.jcxavier.android.opengl.engine.type.RotationMode;
 import com.jcxavier.android.opengl.game.manager.GameManager;
 import com.jcxavier.android.opengl.game.manager.input.InputHandler;
 import com.jcxavier.android.opengl.game.type.Positionable;
@@ -24,6 +26,7 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
 
     protected final Vector3 mPosition;
     protected final Vector3 mRotation;
+    protected RotationMode mRotationMode;
     protected final Vector3 mScale;
     protected final Vector2 mSize;
     protected final Vector2 mAnchorPoint;
@@ -44,6 +47,7 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
     public GameObject() {
         mPosition = new Vector3(0, 0, 0);
         mRotation = new Vector3(0, 0,0);
+        mRotationMode = RotationMode.ZXY;
         mScale = new Vector3(1, 1, 1);
         mAnchorPoint = new Vector2(0, 0);
         mPivot = new Vector3(0, 0, 0);
@@ -77,6 +81,7 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
             mModelMatrix.translate(Vector3.negate(mPivot));
 
             // TODO rotation
+            mModelMatrix.rotate(mRotation, mRotationMode);
 
             mModelMatrix.scale(mScale);
             mModelMatrix.translate(mPivot);
@@ -129,7 +134,14 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
         mRotation.set(rotation);
     }
 
-    @Override public Vector3 getRotation() { return mRotation; }
+    @Override
+    public Vector3 getRotation() { return mRotation; }
+
+    @Override
+    public void setRotationMode(final RotationMode rotMode) { mRotationMode = rotMode; }
+
+    @Override
+    public RotationMode getRotationMode() { return  mRotationMode; }
 
     /**
      * Sets the alpha value of this object.
