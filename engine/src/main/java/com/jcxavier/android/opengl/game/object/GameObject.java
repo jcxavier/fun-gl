@@ -1,29 +1,25 @@
 package com.jcxavier.android.opengl.game.object;
 
-import java.lang.ref.WeakReference;
-import java.util.Vector;
-
-import android.opengl.Matrix;
 import android.view.MotionEvent;
-
 import com.jcxavier.android.opengl.engine.type.RotationMode;
 import com.jcxavier.android.opengl.game.manager.GameManager;
 import com.jcxavier.android.opengl.game.manager.input.InputHandler;
-import com.jcxavier.android.opengl.game.type.Positionable;
 import com.jcxavier.android.opengl.game.type.Resizeable;
-import com.jcxavier.android.opengl.game.type.Rotatable;
 import com.jcxavier.android.opengl.game.type.Touchable;
+import com.jcxavier.android.opengl.game.type.Transformable;
 import com.jcxavier.android.opengl.game.type.Updateable;
 import com.jcxavier.android.opengl.math.Matrix4;
 import com.jcxavier.android.opengl.math.Vector2;
 import com.jcxavier.android.opengl.math.Vector3;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created on 11/03/2014.
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public abstract class GameObject implements Positionable, Resizeable, Rotatable, Updateable, Touchable {
+public abstract class GameObject implements Resizeable, Updateable, Transformable, Touchable {
 
     /**
      * Auxiliary vector for calculations.
@@ -32,11 +28,13 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
 
     protected final Vector3 mPosition;
     protected final Vector3 mRotation;
-    protected RotationMode mRotationMode;
     protected final Vector3 mScale;
     protected final Vector2 mSize;
     protected final Vector2 mAnchorPoint;
+
+    protected RotationMode mRotationMode;
     protected float mAlpha;
+    private boolean mVisible;
 
     private final Vector3 mPivot;
     protected final Matrix4 mModelMatrix;
@@ -46,8 +44,6 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
     private WeakReference<GameManager> mGameManager;
     private InputHandler mInputHandler;
     private boolean mTouchable;
-
-    private boolean mVisible;
 
     /**
      * Creates a simple game object, able to position itself and handle basic transformations.
@@ -92,48 +88,41 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
             mModelMatrix.translate(TMP_VEC3.set(mPivot).negate());
 
             switch (mRotationMode) {
-                case XYZ: {
+                case XYZ:
                     mModelMatrix.rotateX(mRotation.x);
-                    mModelMatrix.rotateX(mRotation.y);
-                    mModelMatrix.rotateX(mRotation.z);
+                    mModelMatrix.rotateY(mRotation.y);
+                    mModelMatrix.rotateZ(mRotation.z);
                     break;
-                }
-                case XZY: {
+
+                case XZY:
                     mModelMatrix.rotateX(mRotation.x);
-                    mModelMatrix.rotateX(mRotation.z);
-                    mModelMatrix.rotateX(mRotation.y);
+                    mModelMatrix.rotateZ(mRotation.z);
+                    mModelMatrix.rotateY(mRotation.y);
                     break;
-                }
-                case YXZ: {
-                    mModelMatrix.rotateX(mRotation.y);
+
+                case YXZ:
+                    mModelMatrix.rotateY(mRotation.y);
                     mModelMatrix.rotateX(mRotation.x);
-                    mModelMatrix.rotateX(mRotation.z);
+                    mModelMatrix.rotateZ(mRotation.z);
                     break;
-                }
-                case YZX: {
-                    mModelMatrix.rotateX(mRotation.y);
+
+                case YZX:
+                    mModelMatrix.rotateY(mRotation.y);
                     mModelMatrix.rotateX(mRotation.z);
+                    mModelMatrix.rotateZ(mRotation.x);
+                    break;
+
+                case ZXY:
+                    mModelMatrix.rotateZ(mRotation.z);
+                    mModelMatrix.rotateX(mRotation.x);
+                    mModelMatrix.rotateY(mRotation.y);
+                    break;
+
+                case ZYX:
+                    mModelMatrix.rotateZ(mRotation.z);
+                    mModelMatrix.rotateY(mRotation.y);
                     mModelMatrix.rotateX(mRotation.x);
                     break;
-                }
-                case ZXY: {
-                    mModelMatrix.rotateX(mRotation.z);
-                    mModelMatrix.rotateX(mRotation.x);
-                    mModelMatrix.rotateX(mRotation.y);
-                    break;
-                }
-                case ZYX: {
-                    mModelMatrix.rotateX(mRotation.z);
-                    mModelMatrix.rotateX(mRotation.y);
-                    mModelMatrix.rotateX(mRotation.x);
-                    break;
-                }
-                default:{
-                    // unity default rotation
-                    mModelMatrix.rotateX(mRotation.z);
-                    mModelMatrix.rotateX(mRotation.x);
-                    mModelMatrix.rotateX(mRotation.y);
-                }
             }
 
             mModelMatrix.scale(mScale);
@@ -164,6 +153,27 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
     }
 
     @Override
+    public final void setRotation(final Vector3 rotation) {
+        mRotation.set(rotation);
+        mDirty = true;
+    }
+
+    @Override
+    public Vector3 getRotation() {
+        return mRotation;
+    }
+
+    /**
+     * Sets the rotation mode of this object (the order in which the rotation will be applied).
+     *
+     * @param rotationMode the rotation mode to set
+     */
+    public final void setRotationMode(final RotationMode rotationMode) {
+        mRotationMode = rotationMode;
+        mDirty = true;
+    }
+
+    @Override
     public void setSize(final Vector2 size) {
         mSize.set(size);
         setAnchorPoint(mAnchorPoint);
@@ -190,24 +200,6 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
     public final Vector2 getAnchorPoint() {
         return mAnchorPoint;
     }
-
-    @Override
-    public void setRotation(final Vector3 rotation){
-        mRotation.set(rotation);
-        mDirty = true;
-    }
-
-    @Override
-    public Vector3 getRotation() { return mRotation; }
-
-    @Override
-    public void setRotationMode(final RotationMode rotMode) {
-        mRotationMode = rotMode;
-        mDirty = true;
-    }
-
-    @Override
-    public RotationMode getRotationMode() { return  mRotationMode; }
 
     /**
      * Sets the alpha value of this object.

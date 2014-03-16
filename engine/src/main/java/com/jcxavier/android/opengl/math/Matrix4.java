@@ -2,8 +2,6 @@ package com.jcxavier.android.opengl.math;
 
 import android.opengl.Matrix;
 
-import com.jcxavier.android.opengl.engine.type.RotationMode;
-
 /**
  * Created on 11/03/2014.
  *
@@ -42,36 +40,36 @@ public final class Matrix4 {
         Matrix.scaleM(m, 0, scale.x, scale.y, scale.z);
     }
 
-    public void multiply(Matrix4 matrix) {
+    public void multiply(final Matrix4 matrix) {
         Matrix.multiplyMM(TMP_MATRIX, 0, m, 0, matrix.m, 0);
         System.arraycopy(TMP_MATRIX, 0, m, 0, 16);
     }
 
     /**
-     * Rotates the matrix around the x axis
+     * Rotates the matrix around the x axis.
      *
-     * @param rotation the rotation to apply
+     * @param degrees the rotation to apply, in degrees
      */
-    public void rotateX(float rotation) {
-        Matrix.rotateM(m, 0, rotation, 1, 0, 0);
+    public void rotateX(final float degrees) {
+        Matrix.rotateM(m, 0, degrees, 1, 0, 0);
     }
 
     /**
-     * Rotates the matrix around the y axis
+     * Rotates the matrix around the y axis.
      *
-     * @param rotation the rotation to apply
+     * @param degrees the rotation to apply, in degrees
      */
-    public void rotateY(float rotation) {
-        Matrix.rotateM(m, 0, rotation, 0, 1, 0);
+    public void rotateY(final float degrees) {
+        Matrix.rotateM(m, 0, degrees, 0, 1, 0);
     }
 
     /**
-     * Rotates the matrix around the z axis
+     * Rotates the matrix around the z axis.
      *
-     * @param rotation the rotation to apply
+     * @param degrees the rotation to apply, in degrees
      */
-    public void rotateZ(float rotation) {
-        Matrix.rotateM(m, 0, rotation, 0, 0, 1);
+    public void rotateZ(final float degrees) {
+        Matrix.rotateM(m, 0, degrees, 0, 0, 1);
     }
 
 }
