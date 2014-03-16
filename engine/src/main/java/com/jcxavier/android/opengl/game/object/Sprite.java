@@ -76,8 +76,8 @@ public class Sprite extends GameObject {
         mVertexBufferHandle = buffer[0];
     }
 
-    protected void populateBuffer(final boolean fromScratch) {
-        boolean createNewBuffer = fromScratch;
+    protected void populateBuffer() {
+        boolean createNewBuffer = false;
 
         // the buffer was deleted or wasn't generated for some reason
         if (mVertexBufferHandle == 0) {
@@ -137,7 +137,6 @@ public class Sprite extends GameObject {
 
         if (resize) {
             setSize(new Vector2(mTexture.getWidth(), mTexture.getHeight()));
-            populateBuffer(false);
         }
     }
 
@@ -147,6 +146,9 @@ public class Sprite extends GameObject {
 
         // update the positions with the new size
         updatePositions();
+
+        // repopulate the buffer
+        populateBuffer();
     }
 
     @Override

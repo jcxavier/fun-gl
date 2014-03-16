@@ -16,7 +16,7 @@ import com.jcxavier.android.opengl.math.Vector3;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public class TestStage extends SimpleGameStage {
+class TestStage extends SimpleGameStage {
 
     private long mFrame;
 

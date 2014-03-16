@@ -24,13 +24,14 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
 
     private EngineActivity mActivity;
 
-    final Vector3 mBgColor;
+    private final Vector3 mBgColor;
+    private boolean mBlendingEnabled;
+    private boolean mBackfaceCullingEnabled;
+
     Bitmap.Config mBitmapConfig;
     int mDepthBufferSize;
     int mStencilBufferSize;
     int mSamples;
-    boolean mBlendingEnabled;
-    boolean mBackfaceCullingEnabled;
 
     private long mLastUpdateTimeStamp;
     private GameStage mGame;

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS"
  * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
@@ -13,13 +13,13 @@
 
 package com.jcxavier.android.opengl.engine.gdx;
 
-import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLDisplay;
-
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.EGLConfigChooser;
 import android.util.Log;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLDisplay;
 
 /**
  * {@link EGLConfigChooser} implementation for GLES 1.x and 2.0. Let's hope this really works for all devices. Includes
@@ -28,20 +28,21 @@ import android.util.Log;
  * @author mzechner
  */
 public class GdxEglConfigChooser implements GLSurfaceView.EGLConfigChooser {
+
     private static final int EGL_OPENGL_ES2_BIT = 4;
-    public static final int EGL_COVERAGE_BUFFERS_NV = 0x30E0;
-    public static final int EGL_COVERAGE_SAMPLES_NV = 0x30E1;
+    private static final int EGL_COVERAGE_BUFFERS_NV = 0x30E0;
+    private static final int EGL_COVERAGE_SAMPLES_NV = 0x30E1;
     private static final String TAG = "GdxEglConfigChooser";
 
-    protected int mRedSize;
-    protected int mGreenSize;
-    protected int mBlueSize;
-    protected int mAlphaSize;
-    protected int mDepthSize;
-    protected int mStencilSize;
-    protected int mNumSamples;
-    protected final int[] mConfigAttribs;
-    private int[] mValue = new int[1];
+    private final int mRedSize;
+    private final int mGreenSize;
+    private final int mBlueSize;
+    private final int mAlphaSize;
+    private final int mDepthSize;
+    private final int mStencilSize;
+    private final int mNumSamples;
+    private final int[] mConfigAttribs;
+    private final int[] mValue;
 
     public GdxEglConfigChooser(int r, int g, int b, int a, int depth, int stencil, int numSamples) {
         mRedSize = r;
@@ -52,8 +53,9 @@ public class GdxEglConfigChooser implements GLSurfaceView.EGLConfigChooser {
         mStencilSize = stencil;
         mNumSamples = numSamples;
 
-        mConfigAttribs = new int[]{EGL10.EGL_RED_SIZE, 4, EGL10.EGL_GREEN_SIZE, 4, EGL10.EGL_BLUE_SIZE, 4,
-                EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, EGL10.EGL_NONE};
+        mConfigAttribs = new int[] { EGL10.EGL_RED_SIZE, 4, EGL10.EGL_GREEN_SIZE, 4, EGL10.EGL_BLUE_SIZE, 4,
+                EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, EGL10.EGL_NONE };
+        mValue = new int[1];
     }
 
     public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
@@ -75,7 +77,7 @@ public class GdxEglConfigChooser implements GLSurfaceView.EGLConfigChooser {
         return chooseConfig(egl, display, configs);
     }
 
-    public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display, EGLConfig[] configs) {
+    EGLConfig chooseConfig(EGL10 egl, EGLDisplay display, EGLConfig[] configs) {
         EGLConfig best = null;
         EGLConfig bestAA = null;
         EGLConfig safe = null; // default back to 565 when no exact match found
@@ -161,7 +163,7 @@ public class GdxEglConfigChooser implements GLSurfaceView.EGLConfigChooser {
     }
 
     private void printConfig(EGL10 egl, EGLDisplay display, EGLConfig config) {
-        int[] attributes = {EGL10.EGL_BUFFER_SIZE, EGL10.EGL_ALPHA_SIZE, EGL10.EGL_BLUE_SIZE, EGL10.EGL_GREEN_SIZE,
+        int[] attributes = { EGL10.EGL_BUFFER_SIZE, EGL10.EGL_ALPHA_SIZE, EGL10.EGL_BLUE_SIZE, EGL10.EGL_GREEN_SIZE,
                 EGL10.EGL_RED_SIZE, EGL10.EGL_DEPTH_SIZE, EGL10.EGL_STENCIL_SIZE, EGL10.EGL_CONFIG_CAVEAT, EGL10.EGL_CONFIG_ID,
                 EGL10.EGL_LEVEL, EGL10.EGL_MAX_PBUFFER_HEIGHT, EGL10.EGL_MAX_PBUFFER_PIXELS, EGL10.EGL_MAX_PBUFFER_WIDTH,
                 EGL10.EGL_NATIVE_RENDERABLE, EGL10.EGL_NATIVE_VISUAL_ID, EGL10.EGL_NATIVE_VISUAL_TYPE,
@@ -174,15 +176,15 @@ public class GdxEglConfigChooser implements GLSurfaceView.EGLConfigChooser {
                 EGL10.EGL_LUMINANCE_SIZE, EGL10.EGL_ALPHA_MASK_SIZE, EGL10.EGL_COLOR_BUFFER_TYPE, EGL10.EGL_RENDERABLE_TYPE, 0x3042,
                 // EGL10.EGL_CONFORMANT
                 EGL_COVERAGE_BUFFERS_NV, /* true */
-                EGL_COVERAGE_SAMPLES_NV};
-        String[] names = {"EGL_BUFFER_SIZE", "EGL_ALPHA_SIZE", "EGL_BLUE_SIZE", "EGL_GREEN_SIZE", "EGL_RED_SIZE", "EGL_DEPTH_SIZE",
+                EGL_COVERAGE_SAMPLES_NV };
+        String[] names = { "EGL_BUFFER_SIZE", "EGL_ALPHA_SIZE", "EGL_BLUE_SIZE", "EGL_GREEN_SIZE", "EGL_RED_SIZE", "EGL_DEPTH_SIZE",
                 "EGL_STENCIL_SIZE", "EGL_CONFIG_CAVEAT", "EGL_CONFIG_ID", "EGL_LEVEL", "EGL_MAX_PBUFFER_HEIGHT",
                 "EGL_MAX_PBUFFER_PIXELS", "EGL_MAX_PBUFFER_WIDTH", "EGL_NATIVE_RENDERABLE", "EGL_NATIVE_VISUAL_ID",
                 "EGL_NATIVE_VISUAL_TYPE", "EGL_PRESERVED_RESOURCES", "EGL_SAMPLES", "EGL_SAMPLE_BUFFERS", "EGL_SURFACE_TYPE",
                 "EGL_TRANSPARENT_TYPE", "EGL_TRANSPARENT_RED_VALUE", "EGL_TRANSPARENT_GREEN_VALUE", "EGL_TRANSPARENT_BLUE_VALUE",
                 "EGL_BIND_TO_TEXTURE_RGB", "EGL_BIND_TO_TEXTURE_RGBA", "EGL_MIN_SWAP_INTERVAL", "EGL_MAX_SWAP_INTERVAL",
                 "EGL_LUMINANCE_SIZE", "EGL_ALPHA_MASK_SIZE", "EGL_COLOR_BUFFER_TYPE", "EGL_RENDERABLE_TYPE", "EGL_CONFORMANT",
-                "EGL_COVERAGE_BUFFERS_NV", "EGL_COVERAGE_SAMPLES_NV"};
+                "EGL_COVERAGE_BUFFERS_NV", "EGL_COVERAGE_SAMPLES_NV" };
         int[] value = new int[1];
         for (int i = 0; i < attributes.length; i++) {
             int attribute = attributes[i];

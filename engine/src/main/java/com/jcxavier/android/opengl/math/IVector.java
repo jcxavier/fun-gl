@@ -5,7 +5,7 @@ package com.jcxavier.android.opengl.math;
  *
  * @author João Xavier <jcxavier@jcxavier.com>
  */
-public interface IVector<T extends IVector<T>> {
+interface IVector<T extends IVector<T>> {
 
     /**
      * Sets this vector from the given vector.

@@ -49,21 +49,24 @@ public abstract class GameObject implements Resizeable, Updateable, Transformabl
      * Creates a simple game object, able to position itself and handle basic transformations.
      */
     public GameObject() {
+        // transformations
         mPosition = new Vector3(0, 0, 0);
-        mRotation = new Vector3(0, 0,0);
-        mRotationMode = RotationMode.ZXY;
+        mRotation = new Vector3(0, 0, 0);
         mScale = new Vector3(1, 1, 1);
-        mAnchorPoint = new Vector2(0, 0);
-        mPivot = new Vector3(0, 0, 0);
-        mAlpha = 1;
-
         mSize = new Vector2();
-        mModelMatrix = new Matrix4();
+        mAnchorPoint = new Vector2(0, 0);
 
-        mGameManager = new WeakReference<>(null);
+        // default settings
+        mRotationMode = RotationMode.ZXY;
+        mAlpha = 1.0f;
+        mVisible = true;
+
+        // internals
+        mPivot = new Vector3(0, 0, 0);
+        mModelMatrix = new Matrix4();
         mDirty = true;
 
-        mVisible = true;
+        mGameManager = new WeakReference<>(null);
     }
 
     /**
