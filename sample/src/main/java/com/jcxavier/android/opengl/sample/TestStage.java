@@ -82,18 +82,18 @@ public class TestStage extends SimpleGameStage {
 
 
         // add the objects to the stage, they will be automatically managed and updated
-        addGameObject(movingShape);
+        addGameObject(mMovingObject);
         addGameObject(mXrotationObject);
         addGameObject(mYrotationObject);
         addGameObject(mZrotationObject);
-        addGameObject(clickableShape);
+        addGameObject(mClickableShape);
 
         // set the initial position of the moving shape
         resetMovingShapesPosition();
     }
 
     private void resetMovingShapesPosition() {
-        movingShape.setPosition(new Vector3(25f, 25f, 0f));
+        mMovingObject.setPosition(new Vector3(25f, 25f, 0f));
         mXrotationObject.setPosition(new Vector3(25f, 25f, 0f));
         mYrotationObject.setPosition(new Vector3(25f, 25f, 0f));
         mZrotationObject.setPosition(new Vector3(400, 400, 0));
@@ -147,7 +147,7 @@ public class TestStage extends SimpleGameStage {
         mXrotationObject.setRotation(xAxisRotationShapeCurrentRotation);
 
         Vector3 yAxisRotationShapeCurrentRotation = mYrotationObject.getRotation();
-        yAxisRotationShapeCurrentRotation.y += yAxisRotationShapeCurrentRotation;
+        yAxisRotationShapeCurrentRotation.y += rotateOffset;
         mYrotationObject.setRotation(yAxisRotationShapeCurrentRotation);
 
         Vector3 zAxisRotationShapeCurrentRotation = mZrotationObject.getRotation();

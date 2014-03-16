@@ -91,8 +91,50 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
             mModelMatrix.translate(TMP_VEC3.set(mPosition).add(mPivot));
             mModelMatrix.translate(TMP_VEC3.set(mPivot).negate());
 
-            // TODO rotation
-            this.setRotation(mRotation);
+            switch (mRotationMode) {
+                case XYZ: {
+                    mModelMatrix.rotateX(mRotation.x);
+                    mModelMatrix.rotateX(mRotation.y);
+                    mModelMatrix.rotateX(mRotation.z);
+                    break;
+                }
+                case XZY: {
+                    mModelMatrix.rotateX(mRotation.x);
+                    mModelMatrix.rotateX(mRotation.z);
+                    mModelMatrix.rotateX(mRotation.y);
+                    break;
+                }
+                case YXZ: {
+                    mModelMatrix.rotateX(mRotation.y);
+                    mModelMatrix.rotateX(mRotation.x);
+                    mModelMatrix.rotateX(mRotation.z);
+                    break;
+                }
+                case YZX: {
+                    mModelMatrix.rotateX(mRotation.y);
+                    mModelMatrix.rotateX(mRotation.z);
+                    mModelMatrix.rotateX(mRotation.x);
+                    break;
+                }
+                case ZXY: {
+                    mModelMatrix.rotateX(mRotation.z);
+                    mModelMatrix.rotateX(mRotation.x);
+                    mModelMatrix.rotateX(mRotation.y);
+                    break;
+                }
+                case ZYX: {
+                    mModelMatrix.rotateX(mRotation.z);
+                    mModelMatrix.rotateX(mRotation.y);
+                    mModelMatrix.rotateX(mRotation.x);
+                    break;
+                }
+                default:{
+                    // unity default rotation
+                    mModelMatrix.rotateX(mRotation.z);
+                    mModelMatrix.rotateX(mRotation.x);
+                    mModelMatrix.rotateX(mRotation.y);
+                }
+            }
 
             mModelMatrix.scale(mScale);
             mModelMatrix.translate(mPivot);
@@ -151,57 +193,18 @@ public abstract class GameObject implements Positionable, Resizeable, Rotatable,
 
     @Override
     public void setRotation(final Vector3 rotation){
-        switch (mRotationMode) {
-            case XYZ: {
-                mModelMatrix.rotateX(rotation.x);
-                mModelMatrix.rotateX(rotation.y);
-                mModelMatrix.rotateX(rotation.z);
-                break;
-            }
-            case XZY: {
-                mModelMatrix.rotateX(rotation.x);
-                mModelMatrix.rotateX(rotation.z);
-                mModelMatrix.rotateX(rotation.y);
-                break;
-            }
-            case YXZ: {
-                mModelMatrix.rotateX(rotation.y);
-                mModelMatrix.rotateX(rotation.x);
-                mModelMatrix.rotateX(rotation.z);
-                break;
-            }
-            case YZX: {
-                mModelMatrix.rotateX(rotation.y);
-                mModelMatrix.rotateX(rotation.z);
-                mModelMatrix.rotateX(rotation.x);
-                break;
-            }
-            case ZXY: {
-                mModelMatrix.rotateX(rotation.z);
-                mModelMatrix.rotateX(rotation.x);
-                mModelMatrix.rotateX(rotation.y);
-                break;
-            }
-            case ZYX: {
-                mModelMatrix.rotateX(rotation.z);
-                mModelMatrix.rotateX(rotation.y);
-                mModelMatrix.rotateX(rotation.x);
-                break;
-            }
-            default:{
-                // unity default rotation
-                mModelMatrix.rotateX(rotation.z);
-                mModelMatrix.rotateX(rotation.x);
-                mModelMatrix.rotateX(rotation.y);
-            }
-        }
+        mRotation.set(rotation);
+        mDirty = true;
     }
 
     @Override
     public Vector3 getRotation() { return mRotation; }
 
     @Override
-    public void setRotationMode(final RotationMode rotMode) { mRotationMode = rotMode; }
+    public void setRotationMode(final RotationMode rotMode) {
+        mRotationMode = rotMode;
+        mDirty = true;
+    }
 
     @Override
     public RotationMode getRotationMode() { return  mRotationMode; }

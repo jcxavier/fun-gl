@@ -11,9 +11,9 @@ import java.util.Vector;
 public interface Rotatable {
 
     /**
-     * Sets the rotation of the object.
+     * Sets the rotation of the object
      *
-     * @param rotation the rotation to set
+     * @param rotation the rotation to set with degrees angles
      */
     void setRotation(final Vector3 rotation);
 
