@@ -3,6 +3,7 @@ package com.jcxavier.android.opengl.engine.shader;
 import com.jcxavier.android.opengl.math.Vector4;
 
 import static android.opengl.GLES20.*;
+import static com.jcxavier.android.opengl.engine.cache.GLState.cachedGlVertexAttribArraySize;
 import static com.jcxavier.android.opengl.util.Constants.FLOAT_SIZE;
 
 /**
@@ -32,7 +33,7 @@ public class ColorShader extends Shader {
 
     @Override
     public void setAttributePointers() {
-        glEnableVertexAttribArray(0);
+        cachedGlVertexAttribArraySize(1);
 
         glVertexAttribPointer(0, 4, GL_FLOAT, false, STRIDE, 0);
     }
