@@ -1,17 +1,18 @@
 package com.jcxavier.android.opengl.engine;
 
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+import com.jcxavier.android.opengl.engine.cache.GLState;
 import com.jcxavier.android.opengl.engine.shader.ShaderManager;
 import com.jcxavier.android.opengl.engine.texture.TextureManager;
 import com.jcxavier.android.opengl.game.GameStage;
 import com.jcxavier.android.opengl.math.Vector3;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
 
 import static android.opengl.GLES20.*;
 
@@ -57,6 +58,7 @@ class EngineRenderer implements GLSurfaceView.Renderer, RendererOptions {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // reset state
+        GLState.clean();
         TextureManager.getInstance().clean();
         ShaderManager.getInstance().clean();
 

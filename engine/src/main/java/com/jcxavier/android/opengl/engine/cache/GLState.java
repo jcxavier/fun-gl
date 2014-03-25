@@ -15,11 +15,10 @@ public final class GLState {
     private static int sBlendDestFactor;
     private static int sBlendEquation;
 
-    static {
-        resetCache();
-    }
-
-    public static void resetCache() {
+    /**
+     * Clears the GL state. This should be called with every GL context creation.
+     */
+    public static void clean() {
         sVertexAttribArraysEnabled = 0;
         sShaderProgram = -1;
         sActiveTexture = -1;
