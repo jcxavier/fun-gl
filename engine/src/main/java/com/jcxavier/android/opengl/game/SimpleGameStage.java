@@ -90,6 +90,12 @@ public class SimpleGameStage implements GameStage, GameManager {
         return mScreenManager;
     }
 
+    protected final void addGameObjects(final GameObject... gameObjects) {
+        for (GameObject gameObject : gameObjects) {
+            addGameObject(gameObject);
+        }
+    }
+
     protected final void addGameObject(final GameObject gameObject) {
         gameObject.setGameManager(this);
         mUpdateableObjects.add(gameObject);

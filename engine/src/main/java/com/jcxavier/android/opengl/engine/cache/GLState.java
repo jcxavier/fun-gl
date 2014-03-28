@@ -60,18 +60,18 @@ public final class GLState {
     }
 
     public static void cachedGlActiveTexture(final int texture) {
-        if (texture != sActiveTexture) {
+       if (texture != sActiveTexture) {
             sActiveTexture = texture;
             // reset bound texture as well
             sBoundTexture = -1;
             glActiveTexture(texture);
-        }
+       }
     }
 
     public static void cachedGlBindTexture(final int texture) {
         if (texture != sBoundTexture) {
             sBoundTexture = texture;
-            glBindTexture(GL_TEXTURE0, texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
         }
     }
 
